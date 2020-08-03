@@ -1,0 +1,104 @@
+﻿
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>欢迎！愿你安好</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="ttblog,博客,个人博客">
+    <meta name="description" content="此项目用于个人学习，开源代码，框架没有过多引用第三方框架，易于学习。 这个项目由.net core3.1作为后端，layui作为前端，使用轻量级ORM:dapper进行DB处理">
+    <link rel="icon" href="~/images/title.png" />
+    <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/lib/layui/css/global.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="fly-header layui-bg-black">
+        <div class="layui-container">
+            <a class="fly-logo" href="/">
+                <img src="~/images/lg.png" />
+            </a>
+            <ul class="layui-nav fly-nav layui-hide-xs">
+                <li class="layui-nav-item layui-this">
+                    <a href="/"><i class="iconfont icon-jiaoliu"></i>留言</a>
+                </li>
+                <li class="layui-nav-item layui-this">
+                    <a href="/" target="_blank"><i class="iconfont icon-iconmingxinganli"></i>github</a>
+                </li>
+            </ul>
+
+            <ul class="layui-nav fly-nav-user">
+
+                <!-- 未登入的状态 -->
+                <li class="layui-nav-item">
+                    <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="user/login.html">登入</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="user/reg.html">注册</a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs">
+                    <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
+                </li>
+                <li class="layui-nav-item layui-hide-xs">
+                    <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
+                </li>
+
+                <!-- 登入后的状态 -->
+                <!--
+                <li class="layui-nav-item">
+                  <a class="fly-nav-avatar" href="javascript:;">
+                    <cite class="layui-hide-xs">贤心</cite>
+                    <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+                    <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+                    <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                  </a>
+                  <dl class="layui-nav-child">
+                    <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                    <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+                    <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+                    <hr style="margin: 5px 0;">
+                    <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+                  </dl>
+                </li>
+                -->
+            </ul>
+        </div>
+    </div>
+    <div class="fly-panel fly-column">
+        <div class="layui-container">
+            <ul class="layui-clear">
+                <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
+                <li><a href="jie/index.html">随笔</a></li>
+                <li><a href="jie/index.html">时间</a></li>
+                <li><a href="jie/index.html">视频</a></li>
+                <li><a href="jie/index.html">公告</a></li>
+                <li><a href="jie/index.html">动态</a></li>
+                <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+            </ul>
+        </div>
+    </div>
+    <iframe id="content" frameborder=0 width="100%" style="margin-top:59px" scrolling=no marginwidth='0' marginheight='0' noresize="noresize"
+            src="square"></iframe>
+    <div class="fly-footer">
+        <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+        <p>
+            <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+            <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+            <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+        </p>
+    </div>
+    <script src="~/js/require.js-2.3.6/require.min.js"></script>
+    <script src="~/lib/layui/layui.js"></script>
+    <script src="~/js/require-config.js"></script>
+    <script>
+        require(['jquery', 'utils', 'global'], function ($, utils) {
+            utils.setIframeHeight('content');
+        });
+    </script>
+
+</body>
+</html>

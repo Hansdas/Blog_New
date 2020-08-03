@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "MySqlConnection": "server=;port=database=;user=;password=;SslMode=none;Connection Timeout=15;treatTinyAsBoolean=false;allow user variables = true"
+  }
+}
