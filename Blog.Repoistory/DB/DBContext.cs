@@ -21,6 +21,7 @@ namespace Blog.Repoistory.DB
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ArticleMap());
         }
     }

@@ -5,8 +5,9 @@ using System.Text;
 
 namespace Blog.Domain.Article
 {
-   public class Article:Entity<int> 
+   public class Article
     {
+        public int Id { get; set; }
         /// <summary>
         /// 作者
         /// </summary>
@@ -34,7 +35,7 @@ namespace Blog.Domain.Article
         /// <summary>
         /// 有人评论是否发送邮件
         /// </summary>
-        public bool IsSendEmail { get; set; }
+        public bool? IsSendEmail { get; set; }
         /// <summary>
         /// 点赞数
         /// </summary>

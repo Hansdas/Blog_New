@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Xunit;
+using System.Linq;
 
 namespace Blog.Repoistory.Test
 {
@@ -21,7 +22,7 @@ namespace Blog.Repoistory.Test
                 services.AddDbContext<DbContext>();
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
                 var builder = new DbContextOptionsBuilder<DBContext>();
-                builder.UseMySQL("Data Source=58.87.92.221;Database=Blog;User ID=sa;Password=Sa@123456;pooling=true;port=3306;sslmode=none;CharSet=utf8");
+                builder.UseMySQL("");
                 db = builder.Options;
                 articleRepoistory = serviceProvider.GetRequiredService<IArticleRepoistory>();
             }
@@ -47,9 +48,8 @@ namespace Blog.Repoistory.Test
         {
             try
             {
-                DBContext dBContext = new DBContext(db);
-                var v = dBContext.Set<Article>().Find(1);
-                Article article = articleRepoistory.SelectById(1);
+                DBContext context = new DBContext(db);
+                Article article = context.Set<Article>().Find(1);
             }
             catch (Exception ex)
             {

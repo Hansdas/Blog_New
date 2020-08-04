@@ -7,10 +7,10 @@ namespace Blog.Repoistory.Imp
 {
     public abstract class Repoistory<TEntity, T> : IRepoistory<TEntity, T> where TEntity:class
     {
-        protected DBContext dbContext;
+        protected DBContext _dbContext;
         public Repoistory(DBContext dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
         /// <summary>
         /// 根据id查询
@@ -19,7 +19,7 @@ namespace Blog.Repoistory.Imp
         /// <returns></returns>
         public TEntity SelectById(T id)
         {
-            TEntity entity=  dbContext.Set<TEntity>().Find(id);
+            TEntity entity= _dbContext.Set<TEntity>().Find(id);
 
             return entity;
         }
