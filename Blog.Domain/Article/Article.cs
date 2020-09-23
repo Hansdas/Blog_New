@@ -5,9 +5,8 @@ using System.Text;
 
 namespace Blog.Domain.Article
 {
-   public class Article
+   public class Article:Entity<int>
     {
-        public int Id { get; set; }
         /// <summary>
         /// 作者
         /// </summary>
@@ -48,13 +47,14 @@ namespace Blog.Domain.Article
         /// 评论 ids
         /// </summary>
         public string CommentIds { get; set; }
-        /// <summary>
-        /// 创建时间
-        /// </summary>
-        public DateTime CreateTime { get; set; }
-        /// <summary>
-        /// 更新时间
-        /// </summary>
-        public DateTime? UpdateTime { get; set; }
+        public int CommentCount
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(CommentIds))
+                    return 0;
+                return CommentIds.Split(',').Length;
+            }
+        }
     }
 }

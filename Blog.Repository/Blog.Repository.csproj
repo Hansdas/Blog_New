@@ -6,9 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blog.Repoistory\Core.Repository.csproj" />
-    <ProjectReference Include="..\Blog.Repository\Blog.Repository.csproj" />
-    <ProjectReference Include="..\Core.Cache\Core.Cache.csproj" />
-    <ProjectReference Include="..\Core.Common\Core.Common.csproj" />
   </ItemGroup>
 
 </Project>

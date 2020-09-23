@@ -1,30 +1,28 @@
-using Blog.Domain.Article;
-using Blog.Repoistory.DB;
-using Blog.Repoistory.Imp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Xunit;
-using System.Linq;
+using Blog.Domain;
+using Blog.Repository;
+using Blog.Repository.Imp;
+using Core.Repoistory.DB;
 
 namespace Blog.Repoistory.Test
 {
     public class UnitTest1
     {
-        private IArticleRepoistory articleRepoistory;
-        public static DbContextOptions<DBContext> db;
+        public static DbContextOptions<Core.Repoistory.DB.DBContext> db;
         public UnitTest1()
         {
             try
             {
                 IServiceCollection services = new ServiceCollection();
-                services.AddTransient<IArticleRepoistory, ArticleRepoistory>();
+                services.AddTransient<IArticleRepository, ArticleRepository>();
                 services.AddDbContext<DbContext>();
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
                 var builder = new DbContextOptionsBuilder<DBContext>();
-                builder.UseMySQL("");
+                builder.UseMySQL("Data Source=58.87.92.221;Database=Blog;User ID=sa;Password=Sa@123456;pooling=true;port=3306;sslmode=none;CharSet=utf8");
                 db = builder.Options;
-                articleRepoistory = serviceProvider.GetRequiredService<IArticleRepoistory>();
             }
             catch (Exception ex)
             {
@@ -49,7 +47,9 @@ namespace Blog.Repoistory.Test
             try
             {
                 DBContext context = new DBContext(db);
-                Article article = context.Set<Article>().Find(1);
+                //Article article = context.Set<Article>().Find(1);
+                User user = context.Set<User>().Find(1);
+                
             }
             catch (Exception ex)
             {

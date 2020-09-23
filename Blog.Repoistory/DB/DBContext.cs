@@ -1,4 +1,4 @@
-﻿using Blog.Domain.Article;
+﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
@@ -6,10 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blog.Repoistory.DB
+namespace Core.Repoistory.DB
 {
    public class DBContext:DbContext
     {
+        public DBContext()
+        {
+
+        }
         public DBContext(DbContextOptions<DBContext> options) : base(options)
         {
 
@@ -22,7 +26,9 @@ namespace Blog.Repoistory.DB
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new ArticleMap());
+            //modelBuilder.ApplyConfiguration(new UserMap());
+            //modelBuilder.ApplyConfiguration(new ArticleMap());
+            //modelBuilder.ApplyConfiguration(new WhisperMap());
         }
     }
 }
