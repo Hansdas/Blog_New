@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "MySqlConnection": "server=58.87.92.221;port=3306;database=Blog;user=sa;password=Sa@123456;SslMode=none;Connection Timeout=15;treatTinyAsBoolean=false;allow user variables = true"
+    "MySqlConnection": ""
   },
   "Redis": {
     "Host": "58.87.92.221",
