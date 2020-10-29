@@ -30,7 +30,7 @@ namespace Blog.Application.Service.imp
             if (whisperDTOs.Count == 0)
             {
                 Expression<Func<Whisper, DateTime>> orderBy = s => s.CreateTime;
-                IList<Whisper>  whispers= _whisperRepoistory.SelectByPage(1,6,null,s=>s.CreateTime).ToList();
+                IList<Whisper>  whispers= _whisperRepoistory.SelectByPage(1,12,null,s=>s.CreateTime).ToList();
                 IEnumerable<string> accounts = whispers.Select(s => s.Account);
                 Dictionary<string,string> accountWithName = _userRepository.AccountWithName(accounts);
                 foreach (var item in whispers)

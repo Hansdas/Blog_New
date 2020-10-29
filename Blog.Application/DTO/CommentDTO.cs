@@ -23,6 +23,10 @@ namespace Blog.Application.DTO
         /// </summary>
         public string PostUser { get; set; }
         /// <summary>
+        /// 用户头像
+        /// </summary>
+        public string PostUserPhoto { get; set; }
+        /// <summary>
         /// 评论人昵称
         /// </summary>
         public string PostUsername { get; set; }

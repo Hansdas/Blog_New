@@ -1,7 +1,4 @@
-﻿using Blog.Domain.Core;
-using Blog.Repoistory.DB;
-using Core.Repoistory.DB;
-using Core.Repository;
+﻿using Core.Domain.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,16 +6,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Blog.Repository.Imp
+namespace Core.Repository.Imp
 {
     public abstract class Repository<TEntity, T> : IRepository<TEntity, T> where TEntity : Entity<T>, new()
     {
-        protected DBContext _dbContext;
+        protected DbContext _dbContext;
         /// <summary>
         /// 是否降序
         /// </summary>
         protected bool desc;
-        public Repository(DBContext dbContext)
+        public Repository(DbContext dbContext)
         {
             _dbContext = dbContext;
         }

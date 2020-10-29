@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blog.Repoistory\Core.Repository.csproj" />
     <ProjectReference Include="..\Blog.Repository\Blog.Repository.csproj" />
   </ItemGroup>
 

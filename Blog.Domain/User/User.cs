@@ -1,4 +1,5 @@
 ﻿using Blog.Domain.Core;
+using Core.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,10 @@ namespace Blog.Domain
         /// 密码
         /// </summary>
         public string Password { get;  set; }
+        /// <summary>
+        /// 登录类型
+        /// </summary>
+        public LoginType? LoginType { get; set; }
         /// <summary>
         /// 性别
         /// </summary>

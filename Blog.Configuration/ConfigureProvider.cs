@@ -11,12 +11,20 @@ namespace Core.Configuration
    public class ConfigureProvider
     {
         public static IConfiguration configuration;
-        static ConfigureProvider()
+        private ConfigureProvider()
+        {
+
+        }
+        public ConfigureProvider(params string[] paths)
         {
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("Configs/appsettings.json", false, true);
-            builder.AddJsonFile("Configs/connection.json", false, true);
+            foreach(var path in paths)
+            {
+                builder.AddJsonFile(path, false, true);
+            }
+            //builder.AddJsonFile("Configs/appsettings.json", false, true);
+            //builder.AddJsonFile("Configs/connection.json", false, true);
             configuration = builder.Build();
         }
         /// <summary>

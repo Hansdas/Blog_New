@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Blog.Domain.Article;
-using Blog.Repoistory.DB;
 using Microsoft.EntityFrameworkCore;
 using Dapper;
 using System.Data;
@@ -10,12 +9,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Collections;
 using Blog.Repository.DB;
+using Core.Repository.Imp;
 
 namespace Blog.Repository.Imp
 {
     public class ArticleRepository :Repository<Article,int>, IArticleRepository
     {
-        private IDbConnection connection => DapperContent.connection();
+        private IDbConnection connection => DapperContext.connection();
         public ArticleRepository(DBContext dbContext) : base(dbContext)
         {
 
@@ -58,6 +58,10 @@ namespace Blog.Repository.Imp
             string sql = string.Join(" AND ", sqlList);
             return sql;
         }
+        /// <summary>
+        /// 查询每组最大浏览量的数据
+        /// </summary>
+        /// <returns></returns>
         public  IList<Article> SelectGroupReadCount()
         {
             string sql = "select article_id,article_title,article_author,article_textsection,article_articletype,article_createtime " +
@@ -78,14 +82,24 @@ namespace Blog.Repository.Imp
             return articles;
 
         }
+        /// <summary>
+        /// 通过dapper查询
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public int SelectCountWithDapper(Hashtable condition=null)
         {
             DynamicParameters parameters = new DynamicParameters();
             string where = Where(condition, ref parameters);
-            string sql = "SELECT COUNT(*) FROM T_Article WHERE " + where;
+            string sql = "select count(*) from T_Article where " + where;
             int count = connection.ExecuteScalar<int>(sql, parameters); 
             return count;
         }
+        /// <summary>
+        /// 通过dapper分页查询
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
         public IEnumerable<Article> SelectByPageWithDapper(int currentPage, int pageSize, Hashtable condition = null)
         {
             int pageId = pageSize * (currentPage - 1);
@@ -93,9 +107,9 @@ namespace Blog.Repository.Imp
             parameters.Add("pageId", pageId, DbType.Int32);
             parameters.Add("pageSize", pageSize, DbType.Int32);
             string where = Where(condition, ref parameters);
-            string sql = "SELECT article_id,article_author,article_title,article_textsection,article_articletype,article_isdraft,article_praisecount,article_browsercount,article_comments,article_createtime " +
-                  "FROM T_Article  WHERE " + where +
-                  " ORDER BY article_createtime DESC LIMIT @pageId,@pageSize";
+            string sql = "select article_id,article_author,article_title,article_textsection,article_articletype,article_isdraft,article_praisecount,article_browsercount,article_comments,article_createtime " +
+                  "from T_Article  where " + where +
+                  " order by article_createtime desc limit @pageId,@pageSize";
 
             IEnumerable<dynamic> dynamics = connection.Query(sql, parameters);
             IList<Article> articles = new List<Article>();
@@ -117,6 +131,14 @@ namespace Blog.Repository.Imp
             }
             return articles;
         }
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="currentPage"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="where"></param>
+        /// <param name="orderBy"></param>
+        /// <returns></returns>
         public override IEnumerable<Article> SelectByPage(int currentPage, int pageSize, Expression<Func<Article, bool>> where = null, Expression<Func<Article, object>> orderBy = null)
         {
             int pageId = (currentPage - 1) * pageSize;
@@ -156,9 +178,13 @@ namespace Blog.Repository.Imp
 
             return articles;
         }
-
-     
-
+        /// <summary>
+        /// 查询top
+        /// </summary>
+        /// <param name="top"></param>
+        /// <param name="where"></param>
+        /// <param name="orderBy"></param>
+        /// <returns></returns>
         public IList<Article> SelectTop(int top, Expression<Func<Article, bool>> where=null, Expression<Func<Article, object>> orderBy = null)
         {
             IQueryable<Article> queryable= AsQueryable(where, orderBy).Take(top);
@@ -180,6 +206,30 @@ namespace Blog.Repository.Imp
             }
 
             return articles;
+        }
+        /// <summary>
+        /// 查询上一篇下一篇
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="articleCondition"></param>
+        /// <returns></returns>
+        public IEnumerable<dynamic> SelectContext(int id, Hashtable articleCondition = null)
+        {
+            DynamicParameters dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("article_id", id, DbType.Int32);
+            string where = Where(articleCondition, ref dynamicParameters);
+            string sql = "select article_id,article_title from T_Article "
+                       + "where article_id in( "
+                             + "select max(article_id) "
+                             + "from T_Article "
+                             + "where article_id <@article_id  and " + where
+                             + "union "
+                             + "select min(article_id) "
+                             + "from T_Article "
+                             + "where article_id >@article_id  and " + where
+                             + ")";
+            IEnumerable<dynamic> dynamics = connection.Query(sql, dynamicParameters);
+            return dynamics;
         }
     }
 }

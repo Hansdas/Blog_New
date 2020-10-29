@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Blog.Repository
 {
-   public interface IArticleRepository:IRepository<Article,int>
+    public interface IArticleRepository : IRepository<Article, int>
     {
         /// <summary>
         /// 根据阅读量分组
@@ -19,7 +19,7 @@ namespace Blog.Repository
         /// 查询阅读量前5
         /// </summary>
         /// <returns></returns>
-        IList<Article> SelectTop(int top, Expression<Func<Article, bool>> where=null, Expression<Func<Article, object>> orderBy = null);
+        IList<Article> SelectTop(int top, Expression<Func<Article, bool>> where = null, Expression<Func<Article, object>> orderBy = null);
         /// <summary>
         /// 查询数量
         /// </summary>
@@ -34,5 +34,12 @@ namespace Blog.Repository
         /// <param name="condition"></param>
         /// <returns></returns>
         IEnumerable<Article> SelectByPageWithDapper(int currentPage, int pageSize, Hashtable condition = null);
+        /// <summary>
+        /// 查询上一篇下一篇
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="articleCondition"></param>
+        /// <returns></returns>
+        IEnumerable<dynamic> SelectContext(int id, Hashtable articleCondition = null);
     }
 }

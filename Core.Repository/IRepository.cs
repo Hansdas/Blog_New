@@ -1,4 +1,4 @@
-﻿using Blog.Domain.Core;
+﻿using Core.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Core.Repository
 {
-   public interface IRepository<TEntity,T> where TEntity : Entity<T>, new()
+    public interface IRepository<TEntity, T> where TEntity : Entity<T>, new()
     {
         /// <summary>
         /// 新增数据
@@ -31,20 +31,20 @@ namespace Core.Repository
         /// </summary>
         /// <param name="where"></param>
         /// <returns></returns>
-        int SelectCount(Expression<Func<TEntity, bool>> where=null);
+        int SelectCount(Expression<Func<TEntity, bool>> where = null);
         /// <summary>
         /// 根据条件查询数据
         /// </summary>
         /// <param name="where"></param>
         /// <returns></returns>
 
-        IEnumerable<TEntity> Select(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, object>> orderBy=null);
+        IEnumerable<TEntity> Select(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, object>> orderBy = null);
         /// <summary>
         /// 分页查询
         /// </summary>
         /// <param name="where"></param>
         /// <returns></returns>
-        IEnumerable<TEntity> SelectByPage(int currentPage, int pageSize,Expression<Func<TEntity, bool>> where=null, Expression<Func<TEntity, object>> orderBy = null);
+        IEnumerable<TEntity> SelectByPage(int currentPage, int pageSize, Expression<Func<TEntity, bool>> where = null, Expression<Func<TEntity, object>> orderBy = null);
         /// <summary>
         /// 更改数据
         /// </summary>

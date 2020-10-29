@@ -1,5 +1,6 @@
 ﻿using Blog.Domain;
 using Blog.Repository.DB;
+using Core.Repository.Imp;
 using System;
 using System.Collections.Generic;
 using System.Linq;

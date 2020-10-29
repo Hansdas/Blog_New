@@ -1,7 +1,27 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/{url}",
+      "DownstreamPathTemplate": "/api/auth/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/{url}",
+      "UpstreamHttpMethod": [ "Get"],
+      //限流
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 1
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{url}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -11,6 +31,10 @@
       ],
       "UpstreamPathTemplate": "/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiAuthKey",
+        "AllowedScopes": []
+      },
       //限流
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -23,7 +47,7 @@
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:5000",
-    "RateLimitOptions": {
+    "RateLimitOptions": {//自定义限流提示
       "DisableRateLimitHeaders": false,
       "QuotaExceededMessage": "request too quickly",
       "HttpStatusCode": 403

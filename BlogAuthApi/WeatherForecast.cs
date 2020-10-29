@@ -1,6 +1,6 @@
 using System;
 
-namespace BlogGateway
+namespace BlogAuthApi
 {
     public class WeatherForecast
     {

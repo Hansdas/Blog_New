@@ -5,13 +5,13 @@ using Xunit;
 using Blog.Domain;
 using Blog.Repository;
 using Blog.Repository.Imp;
-using Core.Repoistory.DB;
+using Blog.Repository.DB;
 
 namespace Blog.Repoistory.Test
 {
     public class UnitTest1
     {
-        public static DbContextOptions<Core.Repoistory.DB.DBContext> db;
+        public static DbContextOptions<DBContext> db;
         public UnitTest1()
         {
             try

@@ -46,5 +46,12 @@ namespace Blog.Application.Service
         /// <param name="condition"></param>
         /// <returns></returns>
         IList<CommentDTO> SelectComments();
+        /// <summary>
+        /// 查询上一篇下一篇
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        UpNextDto SelectContext(int id, ArticleCondition condition = null);
     }
 }

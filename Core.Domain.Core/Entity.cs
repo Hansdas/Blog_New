@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blog.Domain.Core
+namespace Core.Domain.Core
 {
-   public abstract class Entity<T>
+    public abstract class Entity<T>
     {
-        public  T Id { get; set; }
+        public virtual T Id { get; set; }
         /// <summary>
         /// 创建时间
         /// </summary>

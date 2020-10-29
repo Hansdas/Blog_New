@@ -1,4 +1,5 @@
 ﻿using Blog.Domain.Core;
+using Core.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +23,7 @@ namespace Blog.Domain
         /// <summary>
         /// 该条数据审核是否通过
         /// </summary>
-        public bool IsPassing { get; private set; }
+        public bool? IsPassing { get; private set; }
         /// <summary>
         /// 评论数
         /// </summary>

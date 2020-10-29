@@ -1,4 +1,5 @@
 ﻿using Blog.Domain.Core;
+using Core.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,6 +48,17 @@ namespace Blog.Domain.Article
         /// 评论 ids
         /// </summary>
         public string CommentIds { get; set; }
+        /// <summary>
+        /// 评论 ids
+        /// </summary>
+        public IList<string> CommentIdList {
+            get
+            {
+                if (string.IsNullOrEmpty(CommentIds))
+                    return new List<string>();
+                return CommentIds.Split(',');
+            }
+        }
         public int CommentCount
         {
             get

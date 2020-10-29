@@ -1,28 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Blog.Application.Service;
-using Blog.Application.Service.imp;
-using Blog.Repository;
-using Blog.Repository.Imp;
+using Blog.Repository.DB;
+using Core.Common.Filter;
+using Core.Configuration;
 using Core.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace BlogWebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup()
         {
-            Configuration = configuration;
+            string[] paths = { "Configs/appsettings.json", "Configs/connection.json" };
+            new ConfigureProvider(paths);
+            Configuration = ConfigureProvider.configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -30,16 +25,14 @@ namespace BlogWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region
-            //services.AddTransient<IArticleService, ArticleService>();
-            #endregion
-
-            #region
-            //services.AddTransient<IArticleRepository, ArticleRepository>();
-            //services.AddTransient<IUserRepository, UserRepository>();
-            #endregion
+            services.AddMvc(s => s.Filters.Add<GlobaExceptionFilterAttribute>());
             services.AddControllers();
             services.AddSwagger("WebApi","v1");
+            services.AddDbContext<DBContext>(options => {
+                string connection = Configuration.GetConnectionString("MySqlConnection");
+                options.UseMySQL(connection);
+            });
+            services.AddApplicationService().AddRepository().AddCommon();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
