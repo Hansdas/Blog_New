@@ -23,6 +23,7 @@ namespace Blog.Repository.DB
             modelBuilder.ApplyConfiguration(new ArticleMap());
             modelBuilder.ApplyConfiguration(new WhisperMap());
             modelBuilder.ApplyConfiguration(new CommentMap());
+            modelBuilder.ApplyConfiguration(new LeaveMessageMap());
         }
     }
 }

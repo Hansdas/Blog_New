@@ -1,4 +1,7 @@
-﻿using Blog.Domain.Core;
+﻿
+using Blog.Domain.Article;
+using Core.Common.EnumExtensions;
+using Core.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -116,5 +119,34 @@ namespace Blog.Application.DTO
         /// 下一篇标题
         /// </summary>
         public string NextTitle { get; set; }
+    }
+
+    /// <summary>
+    /// 文章归档模型
+    /// </summary>
+    public class ArticleFileDTO
+    {
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public int Total { get; set; }
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public int ArticleType { get; set; }
+        /// <summary>
+        /// 类型名字
+        /// </summary>
+        public string ArticleTypeName
+        {
+            get
+            {
+                return ArticleType.GetEnumText<ArticleType>();
+            }
+        }
+        /// <summary>
+        /// 账号
+        /// </summary>
+        public string Account { get; set; }
     }
 }

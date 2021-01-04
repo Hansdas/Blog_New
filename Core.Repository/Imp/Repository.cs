@@ -17,6 +17,7 @@ namespace Core.Repository.Imp
         protected bool desc;
         public Repository(DbContext dbContext)
         {
+            desc = true;
             _dbContext = dbContext;
         }
         /// <summary>

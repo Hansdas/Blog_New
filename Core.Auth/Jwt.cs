@@ -54,7 +54,7 @@ namespace Core.Auth
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
                 RequireExpirationTime = true,
-
+                                                   
             };
             return tokenValidationParameters;
         }

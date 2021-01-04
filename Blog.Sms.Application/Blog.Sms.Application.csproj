@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.Sms.Domain\Blog.Sms.Domain.csproj" />
+    <ProjectReference Include="..\Blog.Sms.Repository\Blog.Sms.Repository.csproj" />
+    <ProjectReference Include="..\Core.EventBus\Core.EventBus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Service\" />
+  </ItemGroup>
+
+</Project>

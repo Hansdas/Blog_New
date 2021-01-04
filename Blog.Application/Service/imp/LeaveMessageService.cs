@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Text;
+using Blog.Application.DTO;
+using Blog.Domain;
+using Blog.Repository;
+
+namespace Blog.Application.Service.imp
+{
+    public class LeaveMessageService : ILeaveMessageService
+    {
+        private ILeaveMessageRepository _leaveMessageRepository;
+        public LeaveMessageService(ILeaveMessageRepository leaveMessageRepository)
+        {
+            _leaveMessageRepository = leaveMessageRepository;
+        }
+
+        public void Add(LeaveMessageDTO leaveMessageDTO)
+        {
+            LeaveMessage leaveMessage = new LeaveMessage();
+            leaveMessage.IsAction = false;
+            leaveMessage.IsFriendLink = leaveMessageDTO.IsFriendLink;
+            leaveMessage.CreateTime = DateTime.Now;
+            leaveMessage.ContractEmail = leaveMessageDTO.ContractEmail;
+            leaveMessage.Content = leaveMessageDTO.Content;
+            _leaveMessageRepository.Insert(leaveMessage);
+        }
+
+        public List<LeaveMessageDTO> GetLeaveList(int currentPage)
+        {
+            Expression<Func<LeaveMessage, object>> orderByTimeDesc = s => s.CreateTime;
+           IEnumerable<LeaveMessage> leaveMessages=  _leaveMessageRepository.SelectByPage(currentPage,5,null,orderByTimeDesc);
+            List<LeaveMessageDTO> leaveMessageDTOs = new List<LeaveMessageDTO>();
+            foreach(var item in leaveMessages)
+            {
+                LeaveMessageDTO leaveMessageDTO = new LeaveMessageDTO();
+                leaveMessageDTO.IsFriendLink = item.IsFriendLink;
+                if (item.IsFriendLink)
+                {
+                   var arr= item.Content.Split(';');
+                    for(int i = 0; i < arr.Length; i++)
+                    {
+                        if (i == 0)
+                            leaveMessageDTO.Content += string.Format("邮箱：{0}<br>", arr[i]);
+                        else if(i==1)
+                            leaveMessageDTO.Content += string.Format("站点名称：{0}<br>", arr[i]);
+                        else if(i==2)
+                            leaveMessageDTO.Content += string.Format("站点地址：{0}<br>", arr[i]);
+                        else
+                            leaveMessageDTO.Content += string.Format("站点图标Url：{0}<br>", arr[i]);
+                    }
+                }
+                else
+                    leaveMessageDTO.Content = item.Content;
+                leaveMessageDTO.ContractEmail = item.ContractEmail;
+                leaveMessageDTO.CreateTime = item.CreateTime.ToString("yyyy-MM-dd: hh:mm");
+                leaveMessageDTOs.Add(leaveMessageDTO);
+            }
+            return leaveMessageDTOs;
+        }
+        public int SelectCount()
+        {
+            return _leaveMessageRepository.SelectCount();
+        }
+    }
+}

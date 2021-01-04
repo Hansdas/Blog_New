@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blog.Domain.Core
+namespace Core.Domain.Core
 {
   public  class ConstantKey
     {
@@ -17,7 +17,6 @@ namespace Blog.Domain.Core
         /// <summary>
         /// 网站根目录,程序启动时Startup类的Configure方法里面赋值
         /// </summary>
-
         public static string WebRoot = "";
         /// <summary>
         /// 广场页面加载微语cache的ky
@@ -26,12 +25,10 @@ namespace Blog.Domain.Core
         /// <summary>
         /// 旧nginx上传文件虚拟路径
         /// </summary>
-
         public const string NGINX_FILE_ROUTE_OLD = "picture";
         /// <summary>
         /// nginx上传文件虚拟路径
         /// </summary>
-
         public const string NGINX_FILE_ROUTE = "bf";
         /// <summary>
         /// 就数据的文件http
@@ -41,5 +38,9 @@ namespace Blog.Domain.Core
         /// 新数据的文件https
         /// </summary>
         public const string FILE_HTTPS = "https://www.ttblog.site";
+        /// <summary>
+        /// 网关地址
+        /// </summary>
+        public const string GATEWAY_HOST= "http://localhost:5000";
     }
 }

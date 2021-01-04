@@ -52,7 +52,7 @@ namespace Blog.Application.Condition
             }
             if (!string.IsNullOrEmpty(condition.IsDraft))
             {
-                Expression<Func<Article, bool>> expressRight = s => s.IsDraft==Convert.ToBoolean(condition.IsDraft);
+                Expression<Func<Article, bool>> expressRight = s => s.IsDraft== Convert.ToBoolean(condition.IsDraft);
                 Expression.Add(expressLeft, expressRight);
             }
             return expressLeft;

@@ -3,11 +3,8 @@ using Blog.Application.Service.imp;
 using Blog.Repository;
 using Blog.Repository.Imp;
 using Core.Cache;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogWebApi
 {
@@ -20,9 +17,11 @@ namespace BlogWebApi
         /// <returns></returns>
         public static IServiceCollection AddApplicationService(this IServiceCollection services)
         {
-            services.AddTransient<IArticleService, ArticleService>();
-            services.AddTransient<IWhisperService, WhisperService>();
-            services.AddTransient<ICommentService, CommentService>();
+            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IWhisperService, WhisperService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IUserService,UserService>();
+            services.AddScoped<ILeaveMessageService, LeaveMessageService>();
             return services;
         }
         /// <summary>
@@ -32,10 +31,11 @@ namespace BlogWebApi
         /// <returns></returns>
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
-            services.AddTransient<IArticleRepository, ArticleRepository>();
-            services.AddTransient<IWhisperRepository, WhisperRepository>();
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<IWhisperRepository, WhisperRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ILeaveMessageRepository, LeaveMessageRepository>();
             return services;
         }
         /// <summary>
@@ -45,7 +45,9 @@ namespace BlogWebApi
         /// <returns></returns>
         public static IServiceCollection AddCommon(this IServiceCollection services)
         {
-            services.AddTransient<ICacheFactory, CacheFactory>();
+            services.AddSingleton<ICacheFactory, CacheFactory>();
+            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpClient();
             return services;
         }
     }

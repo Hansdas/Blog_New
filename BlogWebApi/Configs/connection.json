@@ -1,12 +1,12 @@
 {
   "ConnectionStrings": {
-    "MySqlConnection": ""
+    "MySqlConnection": "server=;port=;database=;user=;password=;SslMode=none;Connection Timeout=15;treatTinyAsBoolean=false;allow user variables = true"
   },
   "Redis": {
-    "Host": "58.87.92.221",
-    "Port": "6333",
-    "Password": "blog123456",
-    "InstanceName": "Blog",
+    "Host": "",
+    "Port": "",
+    "Password": "",
+    "InstanceName": "",
     "DefaultDB": 0
   }
 }

@@ -31,7 +31,7 @@ namespace Blog.Application.Service.imp
             {
                 User postUser = users.First(s=>s.Account==item.PostUser);
                 CommentDTO commentDTO = new CommentDTO();
-                commentDTO.Guid = item.Id;
+                commentDTO.Guid = item.Guid;
                 commentDTO.Content = item.Content;
                 commentDTO.PostUser = item.PostUser;
                 commentDTO.PostUsername = postUser.Username;

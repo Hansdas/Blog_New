@@ -3,6 +3,7 @@ using Blog.Application.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blog.Application.Service
 {
@@ -53,5 +54,16 @@ namespace Blog.Application.Service
         /// <param name="condition"></param>
         /// <returns></returns>
         UpNextDto SelectContext(int id, ArticleCondition condition = null);
+
+        /// <summary>
+        /// 提交留言评论
+        /// </summary>
+        Task PostComment(int articleId, CommentDTO commentDTO,string authorization);
+        /// <summary>
+        /// 查询文章归档
+        /// </summary>
+        /// <param name="articleCondition"></param>
+        /// <returns></returns>
+        List<ArticleFileDTO> SelectArticleFile(ArticleCondition articleCondition);
     }
 }

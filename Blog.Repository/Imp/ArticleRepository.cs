@@ -46,7 +46,7 @@ namespace Blog.Repository.Imp
             }
             if (condition.ContainsKey("isDraft"))
             {
-                parameters.Add("isDraft", condition["isDraft"]);
+                parameters.Add("isDraft",Convert.ToBoolean(condition["isDraft"]),DbType.Boolean);
                 sqlList.Add("article_isdraft = @isDraft");
             }
             if (condition.ContainsKey("fullText"))
@@ -185,8 +185,9 @@ namespace Blog.Repository.Imp
         /// <param name="where"></param>
         /// <param name="orderBy"></param>
         /// <returns></returns>
-        public IList<Article> SelectTop(int top, Expression<Func<Article, bool>> where=null, Expression<Func<Article, object>> orderBy = null)
+        public IList<Article> SelectTop(int top, Expression<Func<Article, bool>> where=null, Expression<Func<Article, object>> orderBy = null,bool desc=false)
         {
+            this.desc = desc;
             IQueryable<Article> queryable= AsQueryable(where, orderBy).Take(top);
             var results = from a in queryable
                           select new
@@ -194,6 +195,7 @@ namespace Blog.Repository.Imp
                               a.Id,
                               a.Title,
                               a.ArticleType,
+                              a.BrowserCount
                           };
             IList<Article> articles = new List<Article>();
             foreach (var result in results)
@@ -202,6 +204,7 @@ namespace Blog.Repository.Imp
                 article.Id = result.Id;
                 article.Title = result.Title;
                 article.ArticleType = result.ArticleType;
+                article.BrowserCount = result.BrowserCount;
                 articles.Add(article);
             }
 
@@ -230,6 +233,48 @@ namespace Blog.Repository.Imp
                              + ")";
             IEnumerable<dynamic> dynamics = connection.Query(sql, dynamicParameters);
             return dynamics;
+        }
+        /// <summary>
+        /// 根据id查询评论集合
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<string> SelectCommentIds(int id)
+        {
+            Expression<Func<Article, bool>> where = s => s.Id == id;
+            IQueryable<Article> queryable =  AsQueryable(where) ;
+            string commentids=  (from a in queryable select a.CommentIds).FirstOrDefault();
+            List<string> list = new List<string>();
+            if (string.IsNullOrEmpty(commentids))
+                list = commentids.Split(",").ToList();
+            return list;
+        }
+        /// <summary>
+        /// 更新评论id字段
+        /// </summary>
+        /// <param name="commentIds"></param>
+        /// <param name="id"></param>
+        public void UpdateCommentIds(List<string> commentIds, int id)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("Comments", string.Join(',', commentIds));
+            parameters.Add("Id", id);
+            string sql = "update T_Article set article_comments = @Comments where article_id =@Id";
+            connection.Execute(sql, parameters);
+        }
+        /// <summary>
+        /// 查询文章归档
+        /// </summary>
+        /// <param name="articleCondition"></param>
+        /// <returns></returns>
+        public IEnumerable<dynamic> SelectArticleFile(Hashtable articleCondition)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            string where = Where(articleCondition, ref parameters);
+            string sql = "select count(*) as count,article_author,article_articletype from T_Article where " +
+                "" + where + "  group by article_author,article_articletype";
+            IEnumerable<dynamic> resultList = connection.Query(sql, parameters);
+            return resultList;
         }
     }
 }

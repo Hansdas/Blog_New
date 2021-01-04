@@ -1,6 +1,9 @@
+using Autofac;
 using Blog.Repository.DB;
+using Core.Aop;
 using Core.Common.Filter;
 using Core.Configuration;
+using Core.EventBus;
 using Core.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,17 +25,41 @@ namespace BlogWebApi
 
         public IConfiguration Configuration { get; }
 
+        public void ConfigureContainer(ContainerBuilder containerBuilder)
+        {
+            containerBuilder.Builder<IInterceptorTag, InterceptorHandler>("Blog.Application");
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(s => s.Filters.Add<GlobaExceptionFilterAttribute>());
             services.AddControllers();
+            services.AddCors(s =>
+            {
+                s.AddPolicy("cores", build =>
+                {
+                    IConfigurationSection section = Configuration.GetSection("Policy");
+                    string[] origins = section.GetSection("Origins").Value.Split(',');
+                    string[] headers = section.GetSection("Headers").Value.Split(',');
+                    build.WithOrigins(origins)
+                    .WithHeaders(headers)
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+
+                });
+
+            });
             services.AddSwagger("WebApi","v1");
             services.AddDbContext<DBContext>(options => {
                 string connection = Configuration.GetConnectionString("MySqlConnection");
                 options.UseMySQL(connection);
             });
-            services.AddApplicationService().AddRepository().AddCommon();
+            services.AddApplicationService()
+                .AddRepository()
+                .AddCommon()
+                .AddInterceptorServices()
+                .AddEventBus(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +69,7 @@ namespace BlogWebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors("cores");
 
             app.UseSwagger("WebApi");
 

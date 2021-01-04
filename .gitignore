@@ -83,3 +83,7 @@ v15/
 TestResults
 bin
 obj
+/BlogWebApi/Publish
+/BlogSmsApi/Publish
+/BlogGateway/Publish
+/BlogAuthApi/Publish

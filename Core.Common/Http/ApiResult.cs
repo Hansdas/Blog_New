@@ -4,12 +4,17 @@ using System.Text;
 
 namespace Core.Common.Http
 {
-  public class ApiResult
+    public class ApiResult
     {
-        public ApiResult(string code, dynamic data)
+        public ApiResult()
+        {
+
+        }
+        public ApiResult(string code, dynamic data, string msg)
         {
             Code = code;
             Data = data;
+            Msg = msg;
         }
         public ApiResult(string code, string msg)
         {
@@ -28,9 +33,9 @@ namespace Core.Common.Http
         /// 返回数据
         /// </summary>
         public dynamic Data { get; set; }
-        public static ApiResult Success(dynamic data = null)
+        public static ApiResult Success(dynamic data = null, string msg = "")
         {
-            return new ApiResult(HttpStatusCode.SUCCESS, data);
+            return new ApiResult(HttpStatusCode.SUCCESS, data, msg);
         }
         public static ApiResult Error(string code, string msg)
         {

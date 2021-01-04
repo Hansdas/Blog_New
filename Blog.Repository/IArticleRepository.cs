@@ -19,7 +19,7 @@ namespace Blog.Repository
         /// 查询阅读量前5
         /// </summary>
         /// <returns></returns>
-        IList<Article> SelectTop(int top, Expression<Func<Article, bool>> where = null, Expression<Func<Article, object>> orderBy = null);
+        IList<Article> SelectTop(int top, Expression<Func<Article, bool>> where = null, Expression<Func<Article, object>> orderBy = null,bool desc = false);
         /// <summary>
         /// 查询数量
         /// </summary>
@@ -41,5 +41,23 @@ namespace Blog.Repository
         /// <param name="articleCondition"></param>
         /// <returns></returns>
         IEnumerable<dynamic> SelectContext(int id, Hashtable articleCondition = null);
+        /// <summary>
+        /// 根据id查询commetId集合
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        List<string> SelectCommentIds(int id);
+        /// <summary>
+        /// 更新评论id字段
+        /// </summary>
+        /// <param name="commentIds"></param>
+        /// <param name="id"></param>
+        void UpdateCommentIds(List<string> commentIds,int id);
+        /// <summary>
+        /// 查询文章归档
+        /// </summary>
+        /// <param name="articleCondition"></param>
+        /// <returns></returns>
+        IEnumerable<dynamic> SelectArticleFile(Hashtable articleCondition);
     }
 }

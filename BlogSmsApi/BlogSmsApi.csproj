@@ -1,8 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.Sms.Application\Blog.Sms.Application.csproj" />
+    <ProjectReference Include="..\Blog.Sms.Domain\Blog.Sms.Domain.csproj" />
+    <ProjectReference Include="..\Core.Common\Core.Common.csproj" />
+    <ProjectReference Include="..\Core.EventBus\Core.EventBus.csproj" />
+    <ProjectReference Include="..\Core.Swagger\Core.Swagger.csproj" />
+    <ProjectReference Include="..\Socket\Core.Socket.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Publish\" />
+  </ItemGroup>
 
 
 </Project>

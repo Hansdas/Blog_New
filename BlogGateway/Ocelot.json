@@ -1,31 +1,33 @@
 {
   "Routes": [
+    //AuthApi
     {
       "DownstreamPathTemplate": "/api/auth/{url}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "127.0.0.1",
           "Port": 5003
         }
       ],
       "UpstreamPathTemplate": "/auth/{url}",
-      "UpstreamHttpMethod": [ "Get"],
+      "UpstreamHttpMethod": [ "Get" ],
       //限流
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
         "Period": "1s",
         "PeriodTimespan": 1,
-        "Limit": 1
+        "Limit": 10
       }
     },
+    //WebApi
     {
       "DownstreamPathTemplate": "/api/{url}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "127.0.0.1",
           "Port": 5001
         }
       ],
@@ -39,18 +41,43 @@
       "RateLimitOptions": {
         "ClientWhitelist": [],
         "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 1
+        "Period": "1s", //单位时间
+        "PeriodTimespan": 1, //多少秒之后客户端可以重试
+        "Limit": 10 //时间段内允许最大请求的数量
+      }
+    },
+    //SmsApi
+    {
+      "DownstreamPathTemplate": "/api/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/sms/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiAuthKey",
+        "AllowedScopes": []
+      },
+      //限流
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s", //单位时间
+        "PeriodTimespan": 1, //多少秒之后客户端可以重试
+        "Limit": 10 //时间段内允许最大请求的数量
       }
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:5000",
+    "BaseUrl": "http://127.0.0.1:5000",
     "RateLimitOptions": {//自定义限流提示
       "DisableRateLimitHeaders": false,
       "QuotaExceededMessage": "request too quickly",
-      "HttpStatusCode": 403
+      "HttpStatusCode": 500
     }
   },
 
