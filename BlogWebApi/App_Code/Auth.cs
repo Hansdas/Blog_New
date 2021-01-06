@@ -85,5 +85,12 @@ namespace BlogWebApi
             _cacheClient.StringSet(jwtToken, tokenModel, TimeSpan.FromDays(7));
             return jwtToken;
         }
+        public void RemoveLoginToken()
+        {
+            bool flag = _httpContext.HttpContext.Request.Headers.TryGetValue("loginToken", out StringValues token);
+            if (!flag)
+                throw new AuthException("not login");
+            _cacheClient.Remove(token);
+        }
     }
 }
