@@ -42,5 +42,10 @@ namespace Core.Domain.Core
         /// 网关地址
         /// </summary>
         public const string GATEWAY_HOST= "http://localhost:5000";
+        /// <summary>
+        /// 邮件配置
+        /// </summary>
+
+        public const string MAIL_CONFIG_KEY = "MAIL_CONFIG_KEY";
     }
 }

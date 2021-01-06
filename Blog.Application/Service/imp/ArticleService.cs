@@ -166,6 +166,8 @@ namespace Blog.Application.Service.imp
             articleDTO.ReadCount = article.BrowserCount;
             IList<CommentDTO> comments = _commentService.Select(article.CommentIdList.Distinct());
             articleDTO.Comments = comments==null?new List<CommentDTO>():comments;
+            article.BrowserCount += 1;
+            _articleRepoistory.Update(article);
             return articleDTO;
         }
 

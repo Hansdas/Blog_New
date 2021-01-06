@@ -1,4 +1,9 @@
+using Blog.Sms.Application.EventHandler.EmailEventHandler;
+using Blog.Sms.Application.Service;
+using Blog.Sms.Application.Service.Imp;
+using Blog.Sms.Repository;
 using Blog.Sms.Repository.DB;
+using Blog.Sms.Repository.Imp;
 using Core.Common.Filter;
 using Core.Configuration;
 using Core.EventBus;
@@ -53,13 +58,16 @@ namespace BlogSmsApi
                 options.UseMySQL(connection);
             });
             services.AddSingalrServices() ;
-            
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ISysConfigRepository, SysConfigRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<EmailData, CreateEmailHandler>();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

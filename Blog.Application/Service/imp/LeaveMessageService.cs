@@ -5,15 +5,18 @@ using System.Text;
 using Blog.Application.DTO;
 using Blog.Domain;
 using Blog.Repository;
+using Core.EventBus;
 
 namespace Blog.Application.Service.imp
 {
     public class LeaveMessageService : ILeaveMessageService
     {
         private ILeaveMessageRepository _leaveMessageRepository;
-        public LeaveMessageService(ILeaveMessageRepository leaveMessageRepository)
+        private IEventBus _eventBus;
+        public LeaveMessageService(ILeaveMessageRepository leaveMessageRepository, IEventBus eventBus)
         {
             _leaveMessageRepository = leaveMessageRepository;
+            _eventBus = eventBus;
         }
 
         public void Add(LeaveMessageDTO leaveMessageDTO)
@@ -25,6 +28,11 @@ namespace Blog.Application.Service.imp
             leaveMessage.ContractEmail = leaveMessageDTO.ContractEmail;
             leaveMessage.Content = leaveMessageDTO.Content;
             _leaveMessageRepository.Insert(leaveMessage);
+            EmailData emailData = new EmailData();
+            emailData.Body = leaveMessage.Content;
+            emailData.Subject = "天天博客有个新留言";
+            _eventBus.Publish(emailData);
+
         }
 
         public List<LeaveMessageDTO> GetLeaveList(int currentPage)

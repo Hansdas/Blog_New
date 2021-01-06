@@ -27,7 +27,7 @@ namespace Blog.Domain
         /// <summary>
         /// 性别
         /// </summary>
-        public Sex Sex { get;  set; }
+        public Sex Sex { get; set; } = Sex.男;
         /// <summary>
         /// 是否失效
         /// </summary>

@@ -34,7 +34,7 @@ namespace Blog.Application.Condition
         public bool LoginUser { get; set; } = false;
         public static Expression<Func<Article, bool>> BuildExpression(ArticleCondition condition)
         {
-            Expression<Func<Article, bool>> expressLeft = null;
+            Expression<Func<Article, bool>> expressLeft = s=>true;
             if (condition.ArticleType != 0)
             {
                 Expression<Func<Article, bool>> expressRight = s => s.ArticleType == Enum.Parse<ArticleType>(condition.ArticleType.ToString());

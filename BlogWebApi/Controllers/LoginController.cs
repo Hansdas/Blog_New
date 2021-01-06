@@ -3,6 +3,7 @@ using Blog.Application.Service;
 using Core.Cache;
 using Core.Common;
 using Core.Common.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,13 @@ namespace BlogWebApi.Controllers
     {
         private IUserService _userService;
         private ICacheFactory _cacheFactory;
-        public LoginController(IUserService userService, ICacheFactory cacheFactory)
+        private IHttpContextAccessor _httpContext;
+        public LoginController(IUserService userService, ICacheFactory cacheFactory,  IHttpContextAccessor httpContext)
         {
             _userService = userService;
             _cacheFactory = cacheFactory;
-        }
+            _httpContext = httpContext;
+    }
         [Route("login")]
         [HttpPost]
         public ApiResult Login()
@@ -50,6 +53,57 @@ namespace BlogWebApi.Controllers
             {
                 return ApiResult.Error("403", ex.Message);
             }
+        }
+        [Route("login/out")]
+        [HttpGet]
+        public ApiResult LoginOut()
+        {
+            try
+            {
+                Auth auth = new Auth(_cacheFactory, _httpContext);
+                auth.RemoveLoginToken();
+                return ApiResult.Success();
+            }
+            catch (AuthException ex)
+            {
+                return ApiResult.Error("403", ex.Message);
+            }
+        }
+        [Route("login/logon")]
+        [HttpPost]
+        public ApiResult LoginOn([FromBody]UserDTO userDTO)
+        {
+            try
+            {
+                _userService.Create(userDTO);
+                return ApiResult.Success();
+            }
+            catch (AuthException ex)
+            {
+                return ApiResult.Error("400", ex.Message);
+            }
+        }
+        [Route("login/qq/{code}")]
+        [HttpGet]
+        public async Task<ApiResult> QQLogin(string code)
+        {
+            string accessToken = await QQClient.GetAccessToken(code);
+            string openId = await QQClient.GetOpenId(accessToken);
+            UserDTO userDTO = await QQClient.GetQQUser(accessToken, openId);
+            _userService.CreateQQUser(userDTO);
+            IList<Claim> claims = new List<Claim>()
+                {
+                    new Claim("account", userDTO.Account),
+                    new Claim("username", userDTO.Username),
+                    new Claim("sex", userDTO.Sex),
+                    new Claim("birthDate",string.IsNullOrEmpty(userDTO.BirthDate)?"":userDTO.BirthDate),
+                    new Claim("email", string.IsNullOrEmpty(userDTO.Email)?"":userDTO.Email),
+                    new Claim("sign", string.IsNullOrEmpty(userDTO.Sign)?"":userDTO.Sign),
+                    new Claim("phone",string.IsNullOrEmpty(userDTO.Phone)?"":userDTO.Phone),
+                    new Claim("headPhoto", string.IsNullOrEmpty(userDTO.HeadPhoto)?"":userDTO.HeadPhoto)
+                };
+            string jwtToken = new Auth(_cacheFactory).CreateToken(claims);
+            return ApiResult.Success(jwtToken);
         }
     }
 }

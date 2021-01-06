@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.EventBus;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,4 +12,5 @@ namespace Blog.Application.DTO
         public string ContractEmail { get; set; }
         public string CreateTime { get; set; }
     }
+ 
 }

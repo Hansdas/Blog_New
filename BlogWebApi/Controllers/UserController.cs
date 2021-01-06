@@ -1,4 +1,6 @@
-﻿using Blog.Application.DTO;
+﻿using Blog.Application.Condition;
+using Blog.Application.DTO;
+using Blog.Application.Service;
 using Core.Cache;
 using Core.Common.Http;
 using Core.Domain.Core;
@@ -20,24 +22,23 @@ namespace BlogWebApi.Controllers
     {
         private ICacheFactory _cacheFactory;
         private IHttpContextAccessor _httpContext;
-        public UserController(ICacheFactory cacheFactory, IHttpContextAccessor httpContext)
+        private ITidingsService _tidingsService;
+        public UserController(ICacheFactory cacheFactory, IHttpContextAccessor httpContext, ITidingsService tidingsService)
         {
             _cacheFactory = cacheFactory;
             _httpContext = httpContext;
+            _tidingsService = tidingsService;
         }
         [Route("loginuser")]
         [HttpGet]
-        public async Task<ApiResult> GetUser()
+        public ApiResult GetUser()
         {
             Auth auth = new Auth(_cacheFactory, _httpContext);
             UserDTO userDTO = auth.GetLoginUser();
-            string url = ConstantKey.GATEWAY_HOST + "/sms/tidings/" + userDTO.Account;
-            _httpContext.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues value);
-            HttpClient httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization", value.ToString());
-            string response = await httpClient.GetStringAsync(url);
-            ApiResult result = JsonConvert.DeserializeObject<ApiResult>(response);
-            int count = (int)result.Data;
+            TidingsCondition tidingsCondition = new TidingsCondition();
+            tidingsCondition.Account = userDTO.Account;
+            tidingsCondition.IsRead = false;
+            int count = _tidingsService.SelectCount(tidingsCondition); 
             return ApiResult.Success(new { photo = userDTO.HeadPhoto, count = count, account = userDTO.Account });
         }
         [Route("token")]

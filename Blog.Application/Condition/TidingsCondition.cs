@@ -1,4 +1,5 @@
 ﻿using Blog.Domain.Tidings;
+using Core.Repository.Where;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -19,18 +20,13 @@ namespace Blog.Application.Condition
 
         public static Expression<Func<Tidings, bool>> BuildExpression(TidingsCondition condition)
         {
-            Expression<Func<Tidings, bool>> expressLeft = null;
+            Type targetType = typeof(Tidings);
+            ParseCondition<Tidings> parse = new ParseCondition<Tidings>(targetType);
             if (!string.IsNullOrEmpty(condition.Account))
-            {
-                Expression<Func<Tidings, bool>> expressRight = s => s.ReviceUser == condition.Account;
-                Expression.Add(expressLeft, expressRight);
-            }
+                parse.BuildExpression("ReviceUser", condition.Account,ConditionOperation.Equal);
             if (condition.IsRead.HasValue)
-            {
-                Expression<Func<Tidings, bool>> expressRight = s => s.IsRead==condition.IsRead.Value;
-                Expression.Add(expressLeft, expressRight);
-            }
-            return expressLeft;
+                parse.BuildExpression("IsRead", condition.IsRead.Value.ToString(), ConditionOperation.Equal);
+            return parse.BuildWhereExpression(); ;
         }
     }
 }

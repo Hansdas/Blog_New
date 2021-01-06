@@ -89,7 +89,6 @@ namespace Core.EventBus.RabbitMQ
                 catch (Exception ex)
                 {
                     _log.LogInformation(ex.Message);
-                    //throw ex;
                 }
             };
 

@@ -7,11 +7,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Blog.Sms.Domain\Blog.Sms.Domain.csproj" />
     <ProjectReference Include="..\Blog.Sms.Repository\Blog.Sms.Repository.csproj" />
+    <ProjectReference Include="..\Core.Common\Core.Common.csproj" />
     <ProjectReference Include="..\Core.EventBus\Core.EventBus.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Service\" />
   </ItemGroup>
 
 </Project>

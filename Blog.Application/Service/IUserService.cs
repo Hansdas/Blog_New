@@ -22,5 +22,15 @@ namespace Blog.Application.Service
         /// <param name="password"></param>
         /// <returns></returns>
         UserDTO Login(string account,string password);
+        /// <summary>
+        /// 创建一个用户
+        /// </summary>
+        /// <param name="userDTO"></param>
+        void Create(UserDTO userDTO);
+        /// <summary>
+        /// 创建qq用户
+        /// </summary>
+        /// <param name="userDTO"></param>
+        void CreateQQUser(UserDTO userDTO);
     }
 }

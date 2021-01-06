@@ -33,7 +33,6 @@ namespace Blog.Application.Service.imp
             //tidings.AdditionalData = tidingsDTO;
             tidings.IsRead = tidingsDTO.IsRead;
             _tidingsRepository.Insert(tidings);
-            _tidingsRepository.SelectCount(s => s.ReviceUser == tidings.ReviceUser && s.IsRead == false);
         }
 
         public List<TidingsDTO> GetTidingsDTOs(int currentPage, int pageSize, TidingsCondition tidingsCondition = null)
