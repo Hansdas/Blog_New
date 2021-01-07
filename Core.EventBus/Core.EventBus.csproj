@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blog.Configuration\Core.Configuration.csproj" />
+    <ProjectReference Include="..\Core.Log\Core.Log.csproj" />
   </ItemGroup>
 
 </Project>

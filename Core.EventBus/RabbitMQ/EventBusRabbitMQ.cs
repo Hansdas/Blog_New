@@ -1,4 +1,5 @@
 ﻿using Core.EventBus.RabbitMQ.Imp;
+using Core.Log;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -78,7 +79,6 @@ namespace Core.EventBus.RabbitMQ
                 string eventName = ea.RoutingKey;
                 byte[] resp = ea.Body.ToArray();
                 string body = Encoding.UTF8.GetString(resp);
-                _log.LogInformation(body);
                 try
                 {
                     Type eventType = _eventBusManager.FindEventType(eventName);
@@ -88,7 +88,7 @@ namespace Core.EventBus.RabbitMQ
                 }
                 catch (Exception ex)
                 {
-                    _log.LogInformation(ex.Message);
+                    LogUtils.LogError(ex, "EventBusRabbitMQ", ex.Message);
                 }
             };
 

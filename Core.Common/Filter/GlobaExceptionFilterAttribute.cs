@@ -1,4 +1,5 @@
 ﻿using Core.Common.Http;
+using Core.Log;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -15,6 +16,7 @@ namespace Core.Common.Filter
         public override void OnException(ExceptionContext context)
         {
             string message = context.Exception.Message;
+            LogUtils.LogError(context.Exception, "GlobaExceptionFilterAttribute", message);
             ApiResult apiResult = ApiResult.Error(HttpStatusCode.ERROR, message);
             context.Result = new JsonResult(apiResult);
             context.ExceptionHandled = true;
