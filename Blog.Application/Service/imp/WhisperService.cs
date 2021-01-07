@@ -78,7 +78,8 @@ namespace Blog.Application.Service.imp
 
         public List<WhisperDTO> SelectPage(int pageIndex, int pageSize, WhisperCondition condition=null)
         {
-            List<Whisper> whispers = _whisperRepoistory.SelectByPage(pageIndex, pageSize).ToList();
+            Expression<Func<Whisper, object>> orderBy = s => s.CreateTime;
+            List<Whisper> whispers = _whisperRepoistory.SelectByPage(pageIndex, pageSize,null,orderBy).ToList();
             List<WhisperDTO> whisperDTOs = new List<WhisperDTO>();
             Dictionary<string, string> accountWithName = _userRepository.AccountWithName(whispers.Select(s => s.Account));
             foreach (var item in whispers)
