@@ -10,6 +10,8 @@
           "Port": 5003
         }
       ],
+      "ServiceName": "AuthApi",
+      "UseServiceDiscovery": true,
       "UpstreamPathTemplate": "/auth/{url}",
       "UpstreamHttpMethod": [ "Get" ],
       //限流
@@ -19,6 +21,11 @@
         "Period": "1s",
         "PeriodTimespan": 1,
         "Limit": 10
+      },
+      "QoSOptions": { //服务质量与熔断,熔断的意思是停止将请求转发到下游服务。当下游服务已经出现故障的时候再请求也是无功而返，
+        "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求
+        "DurationOfBreak": 5000, //熔断的时间，单位为秒
+        "TimeoutValue": 10000 //如果下游请求的处理时间超过多少则自如将请求设置为超时
       }
     },
     //WebApi
@@ -31,6 +38,8 @@
           "Port": 5001
         }
       ],
+      "ServiceName": "WebApi",
+      "UseServiceDiscovery": true,
       "UpstreamPathTemplate": "/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
       "AuthenticationOptions": {
@@ -44,6 +53,11 @@
         "Period": "1s", //单位时间
         "PeriodTimespan": 1, //多少秒之后客户端可以重试
         "Limit": 10 //时间段内允许最大请求的数量
+      },
+      "QoSOptions": { //服务质量与熔断,熔断的意思是停止将请求转发到下游服务。当下游服务已经出现故障的时候再请求也是无功而返，
+        "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求
+        "DurationOfBreak": 5000, //熔断的时间，单位为秒
+        "TimeoutValue": 10000 //如果下游请求的处理时间超过多少则自如将请求设置为超时
       }
     },
     //SmsApi
@@ -56,6 +70,8 @@
           "Port": 5004
         }
       ],
+      "ServiceName": "SmsApi",
+      "UseServiceDiscovery": true,
       "UpstreamPathTemplate": "/sms/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
       "AuthenticationOptions": {
@@ -69,22 +85,27 @@
         "Period": "1s", //单位时间
         "PeriodTimespan": 1, //多少秒之后客户端可以重试
         "Limit": 10 //时间段内允许最大请求的数量
+      },
+      "QoSOptions": { //服务质量与熔断,熔断的意思是停止将请求转发到下游服务。当下游服务已经出现故障的时候再请求也是无功而返，
+        "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求
+        "DurationOfBreak": 5000, //熔断的时间，单位为秒
+        "TimeoutValue": 10000 //如果下游请求的处理时间超过多少则自如将请求设置为超时
       }
     }
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://127.0.0.1:5000",
-    "RateLimitOptions": {//自定义限流提示
+    "RateLimitOptions": { //自定义限流提示
       "DisableRateLimitHeaders": false,
       "QuotaExceededMessage": "request too quickly",
       "HttpStatusCode": 500
+    },
+    "ServiceDiscoveryProvider": {
+      "Host": "localhost",
+      "Port": 8500,
+      "Type": "PollConsul",
+      "PollingInterval": 1000
     }
-  },
-
-  //熔断
-  "QoSOptions": {
-    "ExceptionsAllowedBeforeBreaking": 3,
-    "DurationOfBreak": 5,
-    "TimeoutValue": 5000
   }
+
 }

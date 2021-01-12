@@ -3,6 +3,7 @@ using Blog.Repository.DB;
 using Core.Aop;
 using Core.Common.Filter;
 using Core.Configuration;
+using Core.Consul;
 using Core.EventBus;
 using Core.Log;
 using Core.Swagger;
@@ -60,6 +61,7 @@ namespace BlogWebApi
             services.AddApplicationService()
                 .AddRepository()
                 .AddCommon()
+                .AddConsul()
                 .AddInterceptorServices()
                 .AddEventBus(); 
         }
@@ -76,11 +78,11 @@ namespace BlogWebApi
 
             app.UseSwagger("WebApi");
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UserConsul();
 
             app.UseEndpoints(endpoints =>
             {

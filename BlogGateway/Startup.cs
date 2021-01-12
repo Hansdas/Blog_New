@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Provider.Consul;
+using Ocelot.Provider.Polly;
 
 namespace BlogGateway
 {
@@ -25,7 +27,7 @@ namespace BlogGateway
     {
         public Startup(IConfiguration configuration)
         {
-            string[] paths = { "appsettings.json"};
+            string[] paths = { "appsettings.json" };
             new ConfigureProvider(paths);
             Configuration = ConfigureProvider.configuration;
         }
@@ -38,7 +40,9 @@ namespace BlogGateway
             services.AddControllers();
             services.AddOcelot(new ConfigurationBuilder()
             .AddJsonFile("Ocelot.json")
-            .Build());
+            .Build())
+            .AddPolly()
+            .AddConsul(); 
             services.AddCors(s =>
             {
                 IConfigurationSection section = Configuration.GetSection("policy");
@@ -56,7 +60,7 @@ namespace BlogGateway
              .AddJwtBearer("ApiAuthKey", x =>
              {
                  x.RequireHttpsMetadata = false;
-                 x.TokenValidationParameters = tokenValidationParameters;                
+                 x.TokenValidationParameters = tokenValidationParameters;
              });
         }
 
@@ -67,8 +71,6 @@ namespace BlogGateway
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
 
             app.UseCors("cors");
 

@@ -1,19 +1,11 @@
 {
   "ConnectionStrings": {
     "MySqlConnection": ""
-
-  },
-  "Redis": {
-    "Host": "127.0.0.1",
-    "Port": "6333",
-    "Password": "",
-    "InstanceName": "Blog",
-    "DefaultDB": 0
   },
   "EventBusOption": {
     "MQProvider": "RabbitMQ",
     "Host": "127.0.0.1",
-    "Port": "",
+    "Port": "5672",
     "Username": "",
     "Password": ""
   }

@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Blog.Application\Blog.Application.csproj" />
     <ProjectReference Include="..\Core.Auth\Core.Auth.csproj" />
     <ProjectReference Include="..\Core.Common\Core.Common.csproj" />
+    <ProjectReference Include="..\Core.Consul\Core.Consul.csproj" />
     <ProjectReference Include="..\Core.EventBus\Core.EventBus.csproj" />
     <ProjectReference Include="..\Core.Swagger\Core.Swagger.csproj" />
   </ItemGroup>

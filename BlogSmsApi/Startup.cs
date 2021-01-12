@@ -6,6 +6,7 @@ using Blog.Sms.Repository.DB;
 using Blog.Sms.Repository.Imp;
 using Core.Common.Filter;
 using Core.Configuration;
+using Core.Consul;
 using Core.EventBus;
 using Core.Log;
 using Core.Socket.Singalr;
@@ -24,7 +25,7 @@ namespace BlogSmsApi
     {
         public Startup()
         {
-            string[] paths = { "Configs/appsettings.json"};
+            string[] paths = { "Configs/appsettings.json", "Configs/connection.json" };
             new ConfigureProvider(paths);
             Configuration = ConfigureProvider.configuration;
         }
@@ -62,6 +63,7 @@ namespace BlogSmsApi
             services.AddSingalrServices() ;
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ISysConfigRepository, SysConfigRepository>();
+            services.AddConsul();
 
         }
 
@@ -80,11 +82,12 @@ namespace BlogSmsApi
 
             app.UseSwagger("SmsApi");
 
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UserConsul();
 
             app.UseEndpoints(endpoints =>
             {
