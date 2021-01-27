@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Auth;
+using Core.Auth.IdentityServer4;
 using Core.Configuration;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,7 +39,16 @@ namespace BlogGateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            #region IdentityServerAuthenticationOptions => need to refactor
+            Action<IdentityServerAuthenticationOptions> webOption = option =>
+            {
+                option.Authority = Configuration["IdentityService:Uri"];
+                option.ApiName = Configuration["IdentityService:ApiName:WebApi"];
+                option.RequireHttpsMetadata = Convert.ToBoolean(Configuration["IdentityService:UseHttps"]);
+            };
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+           .AddIdentityServerAuthentication("WebApiAuthKey", webOption);
+            #endregion
             services.AddOcelot(new ConfigurationBuilder()
             .AddJsonFile("Ocelot.json")
             .Build())
@@ -55,13 +66,13 @@ namespace BlogGateway
                     .WithHeaders(headers)
                     );
             });
-            TokenValidationParameters tokenValidationParameters = Jwt.GetTokenValidation();
-            services.AddAuthentication()
-             .AddJwtBearer("ApiAuthKey", x =>
-             {
-                 x.RequireHttpsMetadata = false;
-                 x.TokenValidationParameters = tokenValidationParameters;
-             });
+            //TokenValidationParameters tokenValidationParameters = Jwt.GetTokenValidation();
+            //services.AddAuthentication()
+            // .AddJwtBearer("ApiAuthKey", x =>
+            // {
+            //     x.RequireHttpsMetadata = false;
+            //     x.TokenValidationParameters = tokenValidationParameters;
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,9 +88,6 @@ namespace BlogGateway
             app.UseRouting();
 
             await app.UseOcelot();
-
-            app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {

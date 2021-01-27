@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Auth.IdentityServer4;
 using Core.Configuration;
 using Core.Consul;
 using Microsoft.AspNetCore.Builder;
@@ -19,7 +20,7 @@ namespace BlogAuthApi
     {
         public Startup()
         {
-            string[] paths = { "appsettings.json" };
+            string[] paths = { "appsettings.json","identityserver.json" };
             new ConfigureProvider(paths);
             Configuration = ConfigureProvider.configuration;
         }
@@ -31,6 +32,7 @@ namespace BlogAuthApi
         {
             services.AddControllers();
             services.AddConsul();
+            services.AddIdentityServer4();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,9 +47,11 @@ namespace BlogAuthApi
 
             app.UseRouting();
 
+            app.UseIdentityServer();
+
             app.UseAuthorization();
 
-            app.UserConsul();
+            //app.UserConsul();
 
             app.UseEndpoints(endpoints =>
             {

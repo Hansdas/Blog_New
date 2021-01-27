@@ -10,23 +10,11 @@
           "Port": 5003
         }
       ],
-      "ServiceName": "AuthApi",
+      //"ServiceName": "AuthApi",
+      "LoadBalancer": "NoLoadBalance",
       "UseServiceDiscovery": true,
       "UpstreamPathTemplate": "/auth/{url}",
-      "UpstreamHttpMethod": [ "Get" ],
-      //限流
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s",
-        "PeriodTimespan": 1,
-        "Limit": 10
-      },
-      "QoSOptions": { //服务质量与熔断,熔断的意思是停止将请求转发到下游服务。当下游服务已经出现故障的时候再请求也是无功而返，
-        "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求
-        "DurationOfBreak": 5000, //熔断的时间，单位为秒
-        "TimeoutValue": 10000 //如果下游请求的处理时间超过多少则自如将请求设置为超时
-      }
+      "UpstreamHttpMethod": [ "Get" ]
     },
     //WebApi
     {
@@ -38,26 +26,14 @@
           "Port": 5001
         }
       ],
-      "ServiceName": "WebApi",
+      //"ServiceName": "WebApi",
+      "LoadBalancer": "NoLoadBalance",
       "UseServiceDiscovery": true,
       "UpstreamPathTemplate": "/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "ApiAuthKey",
+        "AuthenticationProviderKey": "WebApiAuthKey",
         "AllowedScopes": []
-      },
-      //限流
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s", //单位时间
-        "PeriodTimespan": 1, //多少秒之后客户端可以重试
-        "Limit": 10 //时间段内允许最大请求的数量
-      },
-      "QoSOptions": { //服务质量与熔断,熔断的意思是停止将请求转发到下游服务。当下游服务已经出现故障的时候再请求也是无功而返，
-        "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求
-        "DurationOfBreak": 5000, //熔断的时间，单位为秒
-        "TimeoutValue": 10000 //如果下游请求的处理时间超过多少则自如将请求设置为超时
       }
     },
     //SmsApi
@@ -74,23 +50,10 @@
       "UseServiceDiscovery": true,
       "UpstreamPathTemplate": "/sms/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "ApiAuthKey",
-        "AllowedScopes": []
-      },
-      //限流
-      "RateLimitOptions": {
-        "ClientWhitelist": [],
-        "EnableRateLimiting": true,
-        "Period": "1s", //单位时间
-        "PeriodTimespan": 1, //多少秒之后客户端可以重试
-        "Limit": 10 //时间段内允许最大请求的数量
-      },
-      "QoSOptions": { //服务质量与熔断,熔断的意思是停止将请求转发到下游服务。当下游服务已经出现故障的时候再请求也是无功而返，
-        "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求
-        "DurationOfBreak": 5000, //熔断的时间，单位为秒
-        "TimeoutValue": 10000 //如果下游请求的处理时间超过多少则自如将请求设置为超时
-      }
+      //"AuthenticationOptions": {
+      //  "AuthenticationProviderKey": "SmsApiAuthKey",
+      //  "AllowedScopes": []
+      //}
     }
   ],
   "GlobalConfiguration": {
@@ -98,13 +61,23 @@
     "RateLimitOptions": { //自定义限流提示
       "DisableRateLimitHeaders": false,
       "QuotaExceededMessage": "request too quickly",
-      "HttpStatusCode": 500
+      "HttpStatusCode": 500,
+      "ClientWhitelist": [],
+      "EnableRateLimiting": true,
+      "Period": "1s", //单位时间
+      "PeriodTimespan": 1, //多少秒之后客户端可以重试
+      "Limit": 10 //时间段内允许最大请求的数量
     },
     "ServiceDiscoveryProvider": {
       "Host": "localhost",
       "Port": 8500,
       "Type": "PollConsul",
       "PollingInterval": 1000
+    },
+    "QoSOptions": { //服务质量与熔断,熔断的意思是停止将请求转发到下游服务。当下游服务已经出现故障的时候再请求也是无功而返，
+      "ExceptionsAllowedBeforeBreaking": 3, //允许多少个异常请求
+      "DurationOfBreak": 5000, //熔断的时间，单位为秒
+      "TimeoutValue": 10000 //如果下游请求的处理时间超过多少则自如将请求设置为超时
     }
   }
 

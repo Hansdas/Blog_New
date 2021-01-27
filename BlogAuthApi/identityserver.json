@@ -1,0 +1,15 @@
+{
+  "WebApi": {
+    "ApiResource": "WebApi",
+    "DisplayName": "WebApi服务认证",
+    "ApiScope": "WebApi",
+    "Client": {
+      "ClientId": "",
+      "ClientName": "",
+      "ClientSecrets": "",
+      "AllowedGrantTypes": "client_credentials",
+      "AllowedScopes": "WebApi",
+      "AccseeTokenTime": "120" //单位秒
+    }
+  }
+}
