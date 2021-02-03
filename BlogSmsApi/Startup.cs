@@ -41,6 +41,18 @@ namespace BlogSmsApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(s =>
+            {
+                IConfigurationSection section = Configuration.GetSection("policy");
+                string[] origins = section.GetSection("origins").Value.Split(',');
+                string[] headers = section.GetSection("headers").Value.Split(",");
+                s.AddPolicy("cors",
+                    p => p.AllowAnyMethod()
+                    .AllowCredentials()
+                    .WithOrigins(origins)
+                    .WithHeaders(headers)
+                    );
+            });
             services.AddEventBus();
             services.AddMvc(s => s.Filters.Add<GlobaExceptionFilterAttribute>());
             services.AddControllers();
@@ -69,6 +81,8 @@ namespace BlogSmsApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("cors");
 
             app.UseSwagger("SmsApi");
 

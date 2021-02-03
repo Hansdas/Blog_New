@@ -49,7 +49,7 @@ namespace BlogAuthApi
 
             app.UseAuthorization();
 
-            //app.UseConsul();
+            app.UseConsul();
 
             app.UseEndpoints(endpoints =>
             {

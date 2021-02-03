@@ -15,8 +15,7 @@ namespace Blog.Sms.Application.Service.Imp
             _singalrContent = singalrContent;
         }
         public void SendWhisper(List<WhisperDTO> whisperDTOs)
-        {
-            throw new System.Exception("111");
+        {          
             Message message = new Message();
             message.Data = whisperDTOs;
             _singalrContent.SendAllClientsMessage(message);
