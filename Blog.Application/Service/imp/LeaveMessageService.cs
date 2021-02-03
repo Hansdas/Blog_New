@@ -38,22 +38,22 @@ namespace Blog.Application.Service.imp
         public List<LeaveMessageDTO> GetLeaveList(int currentPage)
         {
             Expression<Func<LeaveMessage, object>> orderByTimeDesc = s => s.CreateTime;
-           IEnumerable<LeaveMessage> leaveMessages=  _leaveMessageRepository.SelectByPage(currentPage,5,null,orderByTimeDesc);
+            IEnumerable<LeaveMessage> leaveMessages = _leaveMessageRepository.SelectByPage(currentPage, 5, null, orderByTimeDesc);
             List<LeaveMessageDTO> leaveMessageDTOs = new List<LeaveMessageDTO>();
-            foreach(var item in leaveMessages)
+            foreach (var item in leaveMessages)
             {
                 LeaveMessageDTO leaveMessageDTO = new LeaveMessageDTO();
                 leaveMessageDTO.IsFriendLink = item.IsFriendLink;
                 if (item.IsFriendLink)
                 {
-                   var arr= item.Content.Split(';');
-                    for(int i = 0; i < arr.Length; i++)
+                    var arr = item.Content.Split(';');
+                    for (int i = 0; i < arr.Length; i++)
                     {
                         if (i == 0)
                             leaveMessageDTO.Content += string.Format("邮箱：{0}<br>", arr[i]);
-                        else if(i==1)
+                        else if (i == 1)
                             leaveMessageDTO.Content += string.Format("站点名称：{0}<br>", arr[i]);
-                        else if(i==2)
+                        else if (i == 2)
                             leaveMessageDTO.Content += string.Format("站点地址：{0}<br>", arr[i]);
                         else
                             leaveMessageDTO.Content += string.Format("站点图标Url：{0}<br>", arr[i]);
@@ -70,6 +70,27 @@ namespace Blog.Application.Service.imp
         public int SelectCount()
         {
             return _leaveMessageRepository.SelectCount();
+        }
+        public List<FriendLinkDTO> GetFriendLinks()
+        {
+            IEnumerable<LeaveMessage> leaveMessages = _leaveMessageRepository.Select(s => s.IsFriendLink == true);
+            List<FriendLinkDTO> friendLinkDTOs = new List<FriendLinkDTO>();
+            foreach (var item in leaveMessages)
+            {
+                FriendLinkDTO friendLinkDTO = new FriendLinkDTO();
+                var arr = item.Content.Split(';');
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    if (i == 1)
+                        friendLinkDTO.WebName = arr[i];
+                    else if (i == 2)
+                        friendLinkDTO.link = arr[i];
+                    else
+                        friendLinkDTO.Img = arr[i];
+                }
+                friendLinkDTOs.Add(friendLinkDTO);
+            }
+            return friendLinkDTOs;
         }
     }
 }

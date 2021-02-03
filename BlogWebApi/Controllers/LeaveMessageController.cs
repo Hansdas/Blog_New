@@ -18,6 +18,13 @@ namespace BlogWebApi.Controllers
         {
             _leaveMessageService = leaveMessageService;
         }
+        [HttpGet]
+        [Route("friendlinks")]
+        public ApiResult GetFriendLinks()
+        {
+            List<FriendLinkDTO> friendLinks = _leaveMessageService.GetFriendLinks();
+            return ApiResult.Success(friendLinks);
+        }
         [Route("page/{currentPage}")]
         [HttpGet]
         public  ApiResult GetLeavaMessagePage(int currentPage)
