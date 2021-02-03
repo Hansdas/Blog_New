@@ -1,4 +1,5 @@
-﻿using Core.Configuration;
+﻿
+using Core.CPlatform;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blog.Configuration\Core.Configuration.csproj" />
+    <ProjectReference Include="..\Blog.Configuration\Core.CPlatform.csproj" />
     <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
     <ProjectReference Include="..\Core.Repository\Core.Repository.csproj" />
   </ItemGroup>
