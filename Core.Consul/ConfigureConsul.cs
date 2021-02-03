@@ -1,5 +1,6 @@
 ﻿using Consul;
 using Core.CPlatform;
+using Core.Log;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,13 +37,19 @@ namespace Core.Consul
             registration.ID = string.Format("{0}.{1}", model.Host, model.Port);
             registration.Name = model.Name;
             registration.Check = httpCheck;
+            try
+            {
+                client.Agent.ServiceRegister(registration).Wait();
+                var lifeTime = builder.ApplicationServices.GetRequiredService<IApplicationLifetime>();
+                lifeTime.ApplicationStopping.Register(() => {
+                    client.Agent.ServiceDeregister(registration.ID).Wait();
+                });
+            }
+            catch (Exception ex)
+            {
+                LogUtils.LogError(ex, "Core.Consul", ex.Message);
+            }
 
-            client.Agent.ServiceRegister(registration).Wait();
-
-            var lifeTime = builder.ApplicationServices.GetRequiredService<IApplicationLifetime>();
-            lifeTime.ApplicationStopping.Register(() => {
-                client.Agent.ServiceDeregister(registration.ID).Wait();
-            });
             return builder;
         }
     }

@@ -10,7 +10,9 @@ using Blog.Application.DTO;
 using Blog.Domain;
 using Blog.Repository;
 using Core.Cache;
+using Core.Common.Http;
 using Core.Domain.Core;
+using Core.Log;
 using Newtonsoft.Json;
 
 namespace Blog.Application.Service.imp
@@ -36,8 +38,8 @@ namespace Blog.Application.Service.imp
             whisper.Account = account;
             whisper.Content = content;
             whisper.CreateTime = DateTime.Now;
-            whisper=_whisperRepoistory.Insert(whisper);
-            
+            whisper = _whisperRepoistory.Insert(whisper);
+
             WhisperDTO whisperDTO = new WhisperDTO();
             whisperDTO.Id = whisper.Id.ToString();
             whisperDTO.Account = whisper.Account;
@@ -48,10 +50,10 @@ namespace Blog.Application.Service.imp
             long length = await _cacheClient.AddListTop(ConstantKey.CACHE_SQUARE_WHISPER, whisperDTO);
             int listLength = Convert.ToInt32(length);
             if (listLength > 12)
-               await _cacheClient.listPop(ConstantKey.CACHE_SQUARE_WHISPER);
-            List<Whisper> whispers =await _cacheClient.ListRange<Whisper>(ConstantKey.CACHE_SQUARE_WHISPER, 0, 6);
+                await _cacheClient.listPop(ConstantKey.CACHE_SQUARE_WHISPER);
+            List<WhisperDTO> whispers = await _cacheClient.ListRange<WhisperDTO>(ConstantKey.CACHE_SQUARE_WHISPER, 0, 6);
             List<WhisperDTO> whisperDTOs = new List<WhisperDTO>();
-            Dictionary<string, string> accountWithName = _userRepository.AccountWithName(whispers.Select(s=>s.Account));
+            Dictionary<string, string> accountWithName = _userRepository.AccountWithName(whispers.Select(s => s.Account));
             foreach (var item in whispers)
             {
                 whisperDTO = new WhisperDTO();
@@ -59,7 +61,7 @@ namespace Blog.Application.Service.imp
                 whisperDTO.Account = item.Account;
                 whisperDTO.AccountName = accountWithName[item.Account];
                 whisperDTO.Content = item.Content;
-                whisperDTO.CreateDate = item.CreateTime.ToString("yyyy-MM-dd HH:mm");
+                whisperDTO.CreateDate = item.CreateDate;
                 whisperDTOs.Add(whisperDTO);
             }
 
@@ -67,7 +69,18 @@ namespace Blog.Application.Service.imp
             httpClient.DefaultRequestHeaders.Add("Authorization", authorization);
             string jsonValue = JsonConvert.SerializeObject(whisperDTOs);
             string httpUrl = ConstantKey.GATEWAY_HOST + "/sms/singlar/whisper";
-            var response = await httpClient.PostAsync(httpUrl, new StringContent(jsonValue, Encoding.UTF8, "application/json"));
+            try
+            {
+                var response = await httpClient.PostAsync(httpUrl, new StringContent(jsonValue, Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+                ApiResult apiResult = JsonConvert.DeserializeObject<ApiResult>(await response.Content.ReadAsStringAsync());
+                if (apiResult.Code != HttpStatusCode.SUCCESS)
+                    throw new HttpRequestException(apiResult.Msg);
+            }
+            catch (HttpRequestException ex)
+            {
+                LogUtils.LogError(ex, "WhisperService.Create", ex.Message);
+            }
 
         }
 

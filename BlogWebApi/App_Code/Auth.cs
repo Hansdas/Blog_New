@@ -71,6 +71,8 @@ namespace BlogWebApi
             bool flag = httpContext.HttpContext.Request.Headers.TryGetValue("loginToken", out StringValues token);
             if (!flag)
                 throw new AuthException();
+            if(string.IsNullOrEmpty(token[0])||token[0]=="null")
+                throw new AuthException();
             string value = cacheClient.StringGet(token);
             #region 判断是否过期
             TokenModel tokenModel=JsonConvert.DeserializeObject<TokenModel>(value);
