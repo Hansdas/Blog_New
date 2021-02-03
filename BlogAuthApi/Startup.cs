@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Auth.IdentityServer4;
-using Core.Configuration;
 using Core.Consul;
+using Core.CPlatform;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -43,15 +43,13 @@ namespace BlogAuthApi
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseIdentityServer();
 
             app.UseAuthorization();
 
-            //app.UserConsul();
+            //app.UseConsul();
 
             app.UseEndpoints(endpoints =>
             {

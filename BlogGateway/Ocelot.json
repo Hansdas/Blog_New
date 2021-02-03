@@ -32,7 +32,7 @@
       "UpstreamPathTemplate": "/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "WebApiAuthKey",
+        "AuthenticationProviderKey": "ApiAuthKey",
         "AllowedScopes": []
       }
     },
@@ -46,14 +46,29 @@
           "Port": 5004
         }
       ],
-      "ServiceName": "SmsApi",
+      //"ServiceName": "SmsApi",
       "UseServiceDiscovery": true,
       "UpstreamPathTemplate": "/sms/{url}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
-      //"AuthenticationOptions": {
-      //  "AuthenticationProviderKey": "SmsApiAuthKey",
-      //  "AllowedScopes": []
-      //}
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ApiAuthKey",
+        "AllowedScopes": []
+      }
+    },
+    //fileApi
+    {
+      "DownstreamPathTemplate": "/api/{url}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "127.0.0.1",
+          "Port": 5002
+        }
+      ],
+      //"ServiceName": "SmsApi",
+      "UseServiceDiscovery": true,
+      "UpstreamPathTemplate": "/file/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete" ]
     }
   ],
   "GlobalConfiguration": {

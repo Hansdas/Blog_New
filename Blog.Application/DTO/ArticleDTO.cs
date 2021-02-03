@@ -74,6 +74,10 @@ namespace Blog.Application.DTO
 
         }
         /// <summary>
+        /// 是否草稿
+        /// </summary>
+        public bool IsDraft { get; set; }
+        /// <summary>
         /// 文章类型
         /// </summary>
         public string ArticleType { get; set; }

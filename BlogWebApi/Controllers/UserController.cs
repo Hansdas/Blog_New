@@ -20,21 +20,16 @@ namespace BlogWebApi.Controllers
     [ApiController]
     public class UserController: ControllerBase
     {
-        private ICacheFactory _cacheFactory;
-        private IHttpContextAccessor _httpContext;
         private ITidingsService _tidingsService;
-        public UserController(ICacheFactory cacheFactory, IHttpContextAccessor httpContext, ITidingsService tidingsService)
+        public UserController(ITidingsService tidingsService)
         {
-            _cacheFactory = cacheFactory;
-            _httpContext = httpContext;
             _tidingsService = tidingsService;
         }
         [Route("loginuser")]
         [HttpGet]
         public ApiResult GetUser()
         {
-            Auth auth = new Auth(_cacheFactory, _httpContext);
-            UserDTO userDTO = auth.GetLoginUser();
+            UserDTO userDTO = Auth.GetLoginUser();
             TidingsCondition tidingsCondition = new TidingsCondition();
             tidingsCondition.Account = userDTO.Account;
             tidingsCondition.IsRead = false;
@@ -45,8 +40,7 @@ namespace BlogWebApi.Controllers
         [HttpGet]
         public ApiResult  GetUserByToken()
         {
-            Auth auth = new Auth(_cacheFactory,_httpContext);
-            UserDTO userDTO= auth.GetLoginUser();          
+            UserDTO userDTO= Auth.GetLoginUser();          
             return ApiResult.Success(userDTO);
         }
     }

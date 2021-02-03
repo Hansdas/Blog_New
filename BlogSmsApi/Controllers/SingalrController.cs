@@ -1,9 +1,8 @@
 ﻿using Blog.Sms.Application.DTO;
-using Core.Socket;
-using Core.Socket.Singalr;
+using Blog.Sms.Application.Service;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BlogSmsApi.Controllers
 {
@@ -11,18 +10,24 @@ namespace BlogSmsApi.Controllers
     [ApiController]
     public class SingalrController: ControllerBase
     {
-        private ISingalrContent _singalrContent;
-        public SingalrController(ISingalrContent singalrContent)
+        private ISingalrService  _singalrService;
+        public SingalrController(ISingalrService singalrService)
         {
-            _singalrContent = singalrContent;
+            _singalrService = singalrService;
         }
         [HttpPost]
         [Route("whisper")]
-        public async Task AddWhisper([FromBody]List<WhisperDTO> whisperDTOs)
+        public void AddWhisper([FromBody]List<WhisperDTO> whisperDTOs)
         {
-            Message message = new Message();
-            message.Data = whisperDTOs;
-           await _singalrContent.SendAllClientsMessage(message);
+             _singalrService.SendWhisper(whisperDTOs);
+        }
+        [HttpPost]
+        [Route("tidings/count")]
+        public void GetTidingsCount()
+        {
+            string userAccount=  Request.Form["user"];
+            int count = Convert.ToInt32(Request.Form["count"]);
+            _singalrService.SendTidingsCount(userAccount,count);
         }
     }
 }

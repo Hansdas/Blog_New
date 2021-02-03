@@ -1,4 +1,5 @@
-﻿using Core.Configuration;
+﻿
+using Core.CPlatform;
 using StackExchange.Redis;
 using System;
 using System.Collections.Concurrent;

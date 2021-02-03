@@ -9,33 +9,13 @@ namespace Core.Socket.Singalr
 {
     public class SingalrContent : ISingalrContent
     {
-        private static ConcurrentDictionary<string, string> connectionMaps = new ConcurrentDictionary<string, string>();
+       
         private IHubContext<SingalrClient> _hubContext;
         public SingalrContent(IHubContext<SingalrClient> hubContext)
         {
             _hubContext = hubContext;
         }
-        public List<string> GetConnectionIds(string value)
-        {
-            List<string> connectionIds = new List<string>();
-            foreach (KeyValuePair<string, string> item in connectionMaps)
-            {
-                if (item.Value == value)
-                    connectionIds.Add(item.Key);
-            }
-            return connectionIds;
-        }
-
-        public void Remove(string key)
-        {
-            if (connectionMaps.ContainsKey(key))
-                connectionMaps.TryRemove(key, out string value);
-        }
-
-        public void SetConnectionMaps(string connectionId, string value)
-        {
-            connectionMaps.AddOrUpdate(connectionId, value, (string s, string y) => value);
-        }
+          
         #region 向客户端发送消息
         public async Task SendAllClientsMessage(Message message)
         {
@@ -52,7 +32,7 @@ namespace Core.Socket.Singalr
         {
             if (string.IsNullOrEmpty(message.Revicer))
                 throw new ArgumentNullException("指定的客户端连接为空");
-            IReadOnlyList<string> connectionsByUser = GetConnectionIds(message.Revicer);
+            IReadOnlyList<string> connectionsByUser = SingalrConnection.GetConnectionIds(message.Revicer);
             await _hubContext.Clients.Clients(connectionsByUser).SendAsync("ReviceMesage", message);
         }
         #endregion

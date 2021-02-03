@@ -1,16 +1,18 @@
+using Autofac;
 using Blog.Sms.Application.EventHandler.EmailEventHandler;
 using Blog.Sms.Application.Service;
 using Blog.Sms.Application.Service.Imp;
 using Blog.Sms.Repository;
 using Blog.Sms.Repository.DB;
 using Blog.Sms.Repository.Imp;
+using Core.Aop;
 using Core.Common.Filter;
-using Core.Configuration;
-using Core.Consul;
+using Core.CPlatform;
 using Core.EventBus;
 using Core.Log;
 using Core.Socket.Singalr;
 using Core.Swagger;
+using Core.Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +33,10 @@ namespace BlogSmsApi
         }
 
         public IConfiguration Configuration { get; }
-
+        public void ConfigureContainer(ContainerBuilder containerBuilder)
+        {
+            containerBuilder.Builder("Blog.Sms.Application");
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -62,7 +67,9 @@ namespace BlogSmsApi
             });
             services.AddSingalrServices() ;
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ISingalrService, SingalrService>();
             services.AddScoped<ISysConfigRepository, SysConfigRepository>();
+            services.AddInterceptorServices();
             services.AddConsul();
 
         }
@@ -87,11 +94,11 @@ namespace BlogSmsApi
 
             app.UseAuthorization();
 
-            app.UserConsul();
+            app.UseConsul();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<SingalrClient>("/chatHub");
+                endpoints.MapHub<SingalrClient>("/SingalrClient");
                 endpoints.MapControllers();
             });
         }

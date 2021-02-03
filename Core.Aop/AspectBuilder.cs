@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Castle.DynamicProxy;
+using Core.Aop.Polly;
 using Core.Aop.Transaction;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,6 +13,15 @@ namespace Core.Aop
 {
     public static class AspectBuilder
     {
+        /// <summary>
+        /// 注册aop
+        /// </summary>
+        /// <param name="assemblyName"></param>
+        public static void Builder(this ContainerBuilder containerBuilder, string assemblyName)
+        {
+            containerBuilder.Builder<IInterceptorTag, InterceptorHandler>(assemblyName);
+
+        }
         /// <summary>
         /// 注册aop
         /// </summary>
@@ -34,7 +44,8 @@ namespace Core.Aop
         }
         public static IServiceCollection AddInterceptorServices(this IServiceCollection services)
         {
-            services.AddTransient<ITransactionInterceptor, TransactionInterceptor>();
+            services.AddScoped<ITransactionInterceptor, TransactionInterceptor>();
+            services.AddScoped<IPollyInterceptor, PollyInterceptor>();
             return services;
         }
     }

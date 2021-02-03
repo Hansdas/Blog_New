@@ -18,14 +18,10 @@ namespace BlogWebApi.Controllers
     public class LoginController : ControllerBase
     {
         private IUserService _userService;
-        private ICacheFactory _cacheFactory;
-        private IHttpContextAccessor _httpContext;
-        public LoginController(IUserService userService, ICacheFactory cacheFactory,  IHttpContextAccessor httpContext)
+        public LoginController(IUserService userService)
         {
             _userService = userService;
-            _cacheFactory = cacheFactory;
-            _httpContext = httpContext;
-    }
+        }
         [Route("login")]
         [HttpPost]
         public ApiResult Login()
@@ -41,12 +37,12 @@ namespace BlogWebApi.Controllers
                     new Claim("username", user.Username),
                     new Claim("sex", user.Sex),
                     new Claim("birthDate", user.BirthDate),
-                    new Claim("email",user.Email),
-                    new Claim("sign",user.Sign),
-                    new Claim("phone",user.Phone),
+                    new Claim("email",string.IsNullOrEmpty(user.Email)?"":user.Email),
+                    new Claim("sign",string.IsNullOrEmpty(user.Sign)?"":user.Sign),
+                    new Claim("phone",string.IsNullOrEmpty(user.Phone)?"":user.Phone),
                     new Claim("headPhoto",user.HeadPhoto)
                 };
-                string token = new Auth(_cacheFactory).CreateToken(claims);
+                string token = Auth.CreateToken(claims);
                 return ApiResult.Success(token);
             }
             catch (AuthException ex)
@@ -60,8 +56,7 @@ namespace BlogWebApi.Controllers
         {
             try
             {
-                Auth auth = new Auth(_cacheFactory, _httpContext);
-                auth.RemoveLoginToken();
+                Auth.RemoveLoginToken();
                 return ApiResult.Success();
             }
             catch (AuthException ex)
@@ -102,7 +97,7 @@ namespace BlogWebApi.Controllers
                     new Claim("phone",string.IsNullOrEmpty(userDTO.Phone)?"":userDTO.Phone),
                     new Claim("headPhoto", string.IsNullOrEmpty(userDTO.HeadPhoto)?"":userDTO.HeadPhoto)
                 };
-            string jwtToken = new Auth(_cacheFactory).CreateToken(claims);
+            string jwtToken = Auth.CreateToken(claims);
             return ApiResult.Success(jwtToken);
         }
     }

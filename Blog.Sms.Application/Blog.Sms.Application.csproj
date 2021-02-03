@@ -7,8 +7,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Blog.Sms.Domain\Blog.Sms.Domain.csproj" />
     <ProjectReference Include="..\Blog.Sms.Repository\Blog.Sms.Repository.csproj" />
+    <ProjectReference Include="..\Core.Aop\Core.Aop.csproj" />
     <ProjectReference Include="..\Core.Common\Core.Common.csproj" />
     <ProjectReference Include="..\Core.EventBus\Core.EventBus.csproj" />
+    <ProjectReference Include="..\Socket\Core.Socket.csproj" />
   </ItemGroup>
 
 </Project>

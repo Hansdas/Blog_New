@@ -1,8 +1,10 @@
 ﻿using Blog.Application.Condition;
 using Blog.Application.DTO;
 using Blog.Application.Service;
+using Blog.Domain.Article;
 using Core.Cache;
 using Core.Common;
+using Core.Common.EnumExtension;
 using Core.Common.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,13 +24,19 @@ namespace BlogWebApi.Controllers
     public class ArticleController : ControllerBase
     {
         private IArticleService _articleService;
-        private IHttpContextAccessor _httpContext;
-        private ICacheFactory _cacheFactory;
-        public ArticleController(IArticleService articleService, IHttpContextAccessor httpContext, ICacheFactory cacheFactory)
+        public ArticleController(IArticleService articleService)
         {
             _articleService = articleService;
-            _httpContext = httpContext;
-            _cacheFactory = cacheFactory;
+        }
+
+        [Route("add")]
+        [HttpPost]
+        public ApiResult Add([FromBody]ArticleDTO articleDTO)
+        {
+            UserDTO user = Auth.GetLoginUser();
+            articleDTO.AuthorAccount = user.Account;
+             int id= _articleService.Add(articleDTO);
+            return ApiResult.Success(id);
         }
         [HttpGet]
         [Route("{id}")]
@@ -42,7 +50,7 @@ namespace BlogWebApi.Controllers
         public ApiResult LoadArticlePage([FromBody]ArticleCondition articleCondition)
         {
             if (articleCondition.LoginUser)
-                articleCondition.Account = new Auth(_cacheFactory, _httpContext).GetLoginUser().Account;
+                articleCondition.Account = Auth.GetLoginUser().Account;
             IList<ArticleDTO> articleDTOs = _articleService.SelectByPage(articleCondition.CurrentPage, articleCondition.PageSize, articleCondition);
             int count= _articleService.SelectCount(articleCondition);
             return ApiResult.Success(new { list= articleDTOs ,total=count});
@@ -82,11 +90,10 @@ namespace BlogWebApi.Controllers
                 CommentDTO commentDTO = new CommentDTO();
                 commentDTO.Content = content;
                 commentDTO.AdditionalData = replyId;
-                commentDTO.PostUser = new Auth(_cacheFactory,_httpContext).GetLoginUser().Account;
+                commentDTO.PostUser = Auth.GetLoginUser().Account;
                 commentDTO.Revicer = revicer;
                 commentDTO.CommentType = commentType;
-                _httpContext.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues value);
-                await _articleService.PostComment(articleId, commentDTO,value);
+                await _articleService.PostComment(articleId, commentDTO);
                 return ApiResult.Success();
             }
             catch (AuthException)
@@ -102,13 +109,30 @@ namespace BlogWebApi.Controllers
         [Route("user/archive")]        
         public ApiResult GetArchive()
         {
-            Auth auth = new Auth(_cacheFactory, _httpContext);
-            UserDTO userDTO = auth.GetLoginUser();
+            UserDTO userDTO = Auth.GetLoginUser();
             ArticleCondition articleCondition = new ArticleCondition();
             articleCondition.IsDraft = "false";
             articleCondition.Account = userDTO.Account;
             List<ArticleFileDTO> articleDTOs = _articleService.SelectArticleFile(articleCondition);
             return ApiResult.Success(articleDTOs);
+        }
+        /// <summary>
+        /// 获取文章类型
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("types")]
+        public ApiResult ArticleTypes()
+        {
+            IList<KeyValueItem> articleTypes = EnumConvert<ArticleType>.AsKeyValueItem();
+            return ApiResult.Success(articleTypes);
+        }
+        [Route("delete/{id}")]
+        [HttpDelete]
+        public ApiResult DeleteById(int id)
+        {
+            _articleService.DeleteById(id);
+            return ApiResult.Success();
         }
     }
 }

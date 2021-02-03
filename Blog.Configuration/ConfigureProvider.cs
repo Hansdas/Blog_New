@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Core.Configuration
+namespace Core.CPlatform
 {
    public class ConfigureProvider
     {

@@ -16,7 +16,9 @@ namespace Core.Common.Filter
         public override void OnException(ExceptionContext context)
         {
             string message = context.Exception.Message;
-            LogUtils.LogError(context.Exception, "GlobaExceptionFilterAttribute", message);
+            AuthException authException = context.Exception as AuthException;
+            if(authException==null)
+                LogUtils.LogError(context.Exception, "GlobaExceptionFilterAttribute", message);
             ApiResult apiResult = ApiResult.Error(HttpStatusCode.ERROR, message);
             context.Result = new JsonResult(apiResult);
             context.ExceptionHandled = true;

@@ -60,7 +60,7 @@ namespace Blog.Application.DTO
             get
             {
                 if (string.IsNullOrEmpty(_headPhoto))
-                    _headPhoto = "/style/images/touxiang.jpg";
+                    _headPhoto = "/images/touxiang.jpg";
                 if (_headPhoto.Contains(ConstantKey.NGINX_FILE_ROUTE_OLD))
                     _headPhoto = _headPhoto.Replace(ConstantKey.NGINX_FILE_ROUTE_OLD, ConstantKey.NGINX_FILE_ROUTE);
                 if (_headPhoto.Contains(ConstantKey.OLD_FILE_HTTP))

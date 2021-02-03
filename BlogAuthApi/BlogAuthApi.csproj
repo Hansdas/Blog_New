@@ -18,5 +18,11 @@
     <Folder Include="Publish\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="IS4\IS4.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>

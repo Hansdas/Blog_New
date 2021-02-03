@@ -1,4 +1,5 @@
-﻿using Core.Configuration;
+﻿
+using Core.CPlatform;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using System;

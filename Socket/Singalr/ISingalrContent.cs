@@ -9,23 +9,6 @@ namespace Core.Socket.Singalr
     {
 
         /// <summary>
-        /// 获取connectionIds
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        List<string> GetConnectionIds(string value);
-        /// <summary>
-        ///设置connectionid与user的关系
-        /// </summary>
-        /// <param name="connectionId"></param>
-        /// <param name="value"></param>
-        void SetConnectionMaps(string connectionId, string value);
-        /// <summary>
-        /// 删除connection关系
-        /// </summary>
-        /// <param name="key"></param>
-        void Remove(string key);
-        /// <summary>
         /// 向所有客户端（用户）发送消息
         /// </summary>
         /// <param name="message"></param>

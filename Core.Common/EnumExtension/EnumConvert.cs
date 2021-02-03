@@ -45,7 +45,7 @@ namespace Core.Common.EnumExtension
             IList<KeyValueItem> list = new List<KeyValueItem>();
             foreach (var item in array)
             {
-                int key = item.GetEnumValue(); ;
+                int key = item.GetEnumValue();
                 KeyValueItem keyValueItem = new KeyValueItem(key.ToString(), item.ToString());
                 list.Add(keyValueItem);
             }

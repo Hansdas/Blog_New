@@ -4,6 +4,7 @@ using System.Text;
 using System.Transactions;
 using Castle.DynamicProxy;
 using Core.Common.EnumExtensions;
+using Core.Log;
 
 namespace Core.Aop.Transaction
 {
@@ -26,9 +27,11 @@ namespace Core.Aop.Transaction
                         invocation.Proceed();
                         transactionScope.Complete();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        throw;
+                        string methodName= invocation.GetConcreteMethod().Name;
+                        string logger = string.Format("TransactionInterceptor:{0}", methodName);
+                        LogUtils.LogError(ex, logger, ex.Message);
                     }
                     finally
                     {

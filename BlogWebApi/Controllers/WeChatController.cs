@@ -1,6 +1,6 @@
 ﻿using Core.Common;
 using Core.Common.Http;
-using Core.Configuration;
+using Core.CPlatform;
 using Core.Log;
 using Microsoft.AspNetCore.Mvc;
 using System;

@@ -2,7 +2,9 @@
 using Blog.Application.Service.imp;
 using Blog.Repository;
 using Blog.Repository.Imp;
+using Core.Auth.IdentityServer4;
 using Core.Cache;
+using Core.Common.Filter;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,6 +52,8 @@ namespace BlogWebApi
             services.AddSingleton<ICacheFactory, CacheFactory>();
             services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpClient();
+            services.AddMvc(s => s.Filters.Add<GlobaExceptionFilterAttribute>());
+            // services.AddAuth();
             return services;
         }
     }

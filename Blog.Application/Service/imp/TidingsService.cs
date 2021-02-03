@@ -3,10 +3,12 @@ using Blog.Application.DTO;
 using Blog.Domain;
 using Blog.Domain.Tidings;
 using Blog.Repository;
+using Core.Domain.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,8 +32,8 @@ namespace Blog.Application.Service.imp
             tidings.Url = tidingsDTO.Url;
             tidings.SendDate = Convert.ToDateTime(tidingsDTO.PostDate);
             tidings.CommentId = tidingsDTO.CommentId;
-            //tidings.AdditionalData = tidingsDTO;
             tidings.IsRead = tidingsDTO.IsRead;
+            tidings.AdditionalData = tidingsDTO.Content;
             _tidingsRepository.Insert(tidings);
         }
 

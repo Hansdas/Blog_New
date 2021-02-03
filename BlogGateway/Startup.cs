@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Auth;
 using Core.Auth.IdentityServer4;
-using Core.Configuration;
+using Core.CPlatform;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -47,7 +47,7 @@ namespace BlogGateway
                 option.RequireHttpsMetadata = Convert.ToBoolean(Configuration["IdentityService:UseHttps"]);
             };
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-           .AddIdentityServerAuthentication("WebApiAuthKey", webOption);
+           .AddIdentityServerAuthentication("ApiAuthKey", webOption);
             #endregion
             services.AddOcelot(new ConfigurationBuilder()
             .AddJsonFile("Ocelot.json")
@@ -66,13 +66,6 @@ namespace BlogGateway
                     .WithHeaders(headers)
                     );
             });
-            //TokenValidationParameters tokenValidationParameters = Jwt.GetTokenValidation();
-            //services.AddAuthentication()
-            // .AddJwtBearer("ApiAuthKey", x =>
-            // {
-            //     x.RequireHttpsMetadata = false;
-            //     x.TokenValidationParameters = tokenValidationParameters;
-            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

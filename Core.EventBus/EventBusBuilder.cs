@@ -1,4 +1,5 @@
-﻿using Core.Configuration;
+﻿
+using Core.CPlatform;
 using Core.EventBus.RabbitMQ;
 using Core.EventBus.RabbitMQ.Imp;
 using Microsoft.AspNetCore.Builder;

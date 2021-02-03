@@ -1,5 +1,5 @@
 ﻿using Consul;
-using Core.Configuration;
+using Core.CPlatform;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +19,7 @@ namespace Core.Consul
             }
             ));
         }
-        public static IApplicationBuilder UserConsul(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseConsul(this IApplicationBuilder builder)
         {
             IConsulClient client = builder.ApplicationServices.GetRequiredService<IConsulClient>();
 

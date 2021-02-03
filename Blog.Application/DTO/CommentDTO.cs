@@ -11,6 +11,10 @@ namespace Blog.Application.DTO
         /// </summary>
         public string Guid { get; set; }
         /// <summary>
+        /// 被评论的id
+        /// </summary>
+        public string ToGuid { get; set; }
+        /// <summary>
         /// 评论内容
         /// </summary>
         public string Content { get; set; }

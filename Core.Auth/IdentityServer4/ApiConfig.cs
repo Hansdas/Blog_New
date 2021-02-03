@@ -1,4 +1,5 @@
-﻿using Core.Configuration;
+﻿
+using Core.CPlatform;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;

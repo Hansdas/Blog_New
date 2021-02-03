@@ -19,12 +19,10 @@ namespace BlogWebApi
     {
         private IWhisperService _whisperService;
         private IHttpContextAccessor _httpContext;
-        private ICacheFactory _cacheFactory;
         public WhisperController(IWhisperService whisperService, IHttpContextAccessor httpContextAccessor,ICacheFactory cacheFactory)
         {
             _whisperService = whisperService;
             _httpContext = httpContextAccessor;
-            _cacheFactory = cacheFactory;
         }
         [Route("square")]
         [HttpGet]
@@ -40,7 +38,7 @@ namespace BlogWebApi
             try
             {
                 string content = Request.Form["content"];
-                UserDTO userDTO = new Auth(_cacheFactory, _httpContext).GetLoginUser();
+                UserDTO userDTO = Auth.GetLoginUser();
                 _httpContext.HttpContext.Request.Headers.TryGetValue("Authorization", out StringValues value);
                 await _whisperService.Create(content,userDTO.Account,userDTO.Username,value);
                 return ApiResult.Success();
@@ -56,7 +54,7 @@ namespace BlogWebApi
         {
             if (condition.LoginUser)
             {
-                UserDTO userDTO = new Auth(_cacheFactory, _httpContext).GetLoginUser();
+                UserDTO userDTO = Auth.GetLoginUser();
                 condition.Account = userDTO.Account;
             }
             List<WhisperDTO> whisperModels = _whisperService.SelectPage(condition.CurrentPage, condition.PageSize, condition);

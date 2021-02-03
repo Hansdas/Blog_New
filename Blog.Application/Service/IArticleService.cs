@@ -10,6 +10,12 @@ namespace Blog.Application.Service
    public interface IArticleService
     {
         /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="articleDTO"></param>
+        /// <returns></returns>
+        int Add(ArticleDTO articleDTO);
+        /// <summary>
         /// 根据阅读量分组
         /// </summary>
         /// <returns></returns>
@@ -58,12 +64,16 @@ namespace Blog.Application.Service
         /// <summary>
         /// 提交留言评论
         /// </summary>
-        Task PostComment(int articleId, CommentDTO commentDTO,string authorization);
+        Task PostComment(int articleId, CommentDTO commentDTO);
         /// <summary>
         /// 查询文章归档
         /// </summary>
         /// <param name="articleCondition"></param>
         /// <returns></returns>
         List<ArticleFileDTO> SelectArticleFile(ArticleCondition articleCondition);
+        /// <summary>
+        /// 根据id删除
+        /// </summary>
+        void DeleteById(int id);
     }
 }

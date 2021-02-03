@@ -1,4 +1,5 @@
-﻿using Core.Configuration;
+﻿
+using Core.CPlatform;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;

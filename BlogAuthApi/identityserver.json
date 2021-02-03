@@ -1,15 +1,20 @@
 {
   "WebApi": {
-    "ApiResource": "WebApi",
-    "DisplayName": "WebApi服务认证",
-    "ApiScope": "WebApi",
+    "ApiResource": "",
+    "DisplayName": "",
+    "ApiScope": "",
     "Client": {
       "ClientId": "",
       "ClientName": "",
       "ClientSecrets": "",
-      "AllowedGrantTypes": "client_credentials",
-      "AllowedScopes": "WebApi",
-      "AccseeTokenTime": "120" //单位秒
+      "AllowedGrantTypes": "",
+      "AllowedScopes": "",
+      "AccseeTokenTime": "" //单位秒
     }
+  },
+  //部署正式环境使用
+  "Certificate": {
+    "Path": "",
+    "Password": ""
   }
 }

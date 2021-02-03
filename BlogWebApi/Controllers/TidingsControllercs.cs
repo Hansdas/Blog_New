@@ -17,18 +17,13 @@ namespace BlogWebApi.Controllers
     public class TidingsController : ControllerBase
     {
         private ITidingsService _tidingsService;
-        private ICacheFactory _cacheFactory;
-        private IHttpContextAccessor _httpContext;
-        public TidingsController(ITidingsService tidingsService, ICacheFactory cacheFactory, IHttpContextAccessor httpContextAccessor)
+        public TidingsController(ITidingsService tidingsService)
         {
             _tidingsService = tidingsService;
-            _cacheFactory = cacheFactory;
-            _httpContext = httpContextAccessor;
         }
         private UserDTO GetLoginUser()
         {
-            Auth auth = new Auth(_cacheFactory, _httpContext);
-            UserDTO userDTO = auth.GetLoginUser();
+            UserDTO userDTO = Auth.GetLoginUser();
             return userDTO;
         }
         [Route("user")]
