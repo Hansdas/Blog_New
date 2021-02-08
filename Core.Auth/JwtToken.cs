@@ -13,7 +13,7 @@ namespace Core.Auth
         {
             Token = token;
             ExpireMinutes = expireMinutes;
-            CreateTime = createTime.ToString();
+            CreateTime = createTime.ToString("yyyy/MM/dd HH:mm:ss");
         }
     }
 }
