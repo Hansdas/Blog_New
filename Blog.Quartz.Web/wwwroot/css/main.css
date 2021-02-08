@@ -1,0 +1,56 @@
+﻿.header-container {
+    background: #010101;
+    height: 60px;
+    border-bottom: 1px solid #d1d1d1
+}
+
+    .header-container .img img {
+        height: 40px;
+    }
+
+    .header-container .txt {
+        margin-left: -25px;
+        float: left;
+        padding: 18px 23px;
+        height: 100%;
+        font-size: 17px;
+        font-weight: bolder;
+        color: white;
+    }
+
+    .header-container .fun {
+        float: right;
+        margin-right: 2%;
+    }
+
+        .header-container .fun ul {
+            height: 100%;
+            display: inline-block;
+        }
+
+        .header-container .fun li {
+            height: 100%;
+            list-style: none;
+            float: left;
+            padding: 20px 10px;
+            position: relative;
+            cursor: pointer;
+            z-index: 3;
+            /*transition: all .2s ease-in-out;*/
+        }
+
+        .header-container .fun a {
+            color: #b0b0b0;
+            font-size: 15px;
+            text-decoration: none;
+            padding: 20px 20px;
+        }
+
+.actived {
+    border-bottom: 2px solid;
+    color: white;
+}
+
+    .actived a {
+        color: white !important;
+    }

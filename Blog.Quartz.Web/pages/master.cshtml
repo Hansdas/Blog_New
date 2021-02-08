@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>定时任务</title>
+    <link href="~/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/layui/layui.js"></script>
+</head>
+<body>
+    <div class="header-container">
+        <div class="img">
+            <img src="~/img/favicon.png" />
+        </div>
+        <div class="txt">
+            Quartz.Net后台任务调度
+            <span class="author">QQ：283591387</span>
+        </div>
+        <div class="fun">
+            <ul>
+                <li><a href="javascript:;" onclick="">任务列表</a></li>
+                <li><a href="javascript:;" onclick="">帮助</a></li>
+                <li><a href="javascript:;" onclick="">退出</a></li>
+            </ul>
+        </div>
+    </div>
+    @RenderBody()
+</body>
+</html>
