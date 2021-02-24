@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "../Shared/_Layout";
+}
+<table id="task-list"></table>
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">新增</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="getCheckData">开启全部任务</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="getCheckData">开启已选任务</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="isAll">暂停所选</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="getCheckLength">暂停全部</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="getCheckData">删除全部任务</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="getCheckData">删除已选任务</button>
+    </div>
+</script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#task-list'
+            , height: 312
+            , toolbar: '#toolbar'
+            , url: '/demo/table/user/' //数据接口
+            , page: true //开启分页
+            , cols: [[ //表头
+                { field: 'id', title: '', width: 80, type:'checkbox', sort: true, fixed: 'left' }
+                , { field: 'username', title: '用户名', width: 80 }
+                , { field: 'sex', title: '性别', width: 80, sort: true }
+                , { field: 'city', title: '城市', width: 80 }
+                , { field: 'sign', title: '签名', width: 177 }
+                , { field: 'experience', title: '积分', width: 80, sort: true }
+                , { field: 'score', title: '评分', width: 80, sort: true }
+                , { field: 'classify', title: '职业', width: 80 }
+                , { field: 'wealth', title: '财富', width: 135, sort: true }
+            ]]
+        });
+
+    });
+</script>

@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace Blog.Quartz.Web.Controllers
 {
-    public class HomeController: Controller
+    [Route("task")]
+    public class TaskBackgroundController: Controller
     {
+        [Route("list")]
         public IActionResult Index()
+        {
+            return View();
+        }
+        [Route("list/page")]
+        public IActionResult getListPage()
         {
             return View();
         }
