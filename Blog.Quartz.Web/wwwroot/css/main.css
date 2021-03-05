@@ -4,6 +4,12 @@
     border-bottom: 1px solid #d1d1d1
 }
 
+    .header-container .img {
+        float: left;
+        height: 60px;
+        padding: 10px;
+        margin-left: 2%;
+    }
     .header-container .img img {
         height: 40px;
     }

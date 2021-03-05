@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blog.Quartz.Domain\Blog.Quartz.Domain.csproj" />
+    <ProjectReference Include="..\Core.Common\Core.Common.csproj" />
     <ProjectReference Include="..\Core.Repository\Core.Repository.csproj" />
   </ItemGroup>
 

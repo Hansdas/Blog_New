@@ -38,7 +38,7 @@ namespace Core.Repository.Imp
         /// <returns></returns>
         public TEntity SelectById(T id)
         {
-            TEntity entity = _dbContext.Set<TEntity>().Find(id);
+            TEntity entity = _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefault(s=>s.Id.Equals(id));
             return entity;
         }
         /// <summary>

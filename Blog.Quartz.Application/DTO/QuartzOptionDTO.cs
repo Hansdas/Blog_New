@@ -1,12 +1,15 @@
-﻿using Core.Domain.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blog.Quartz.Domain
+namespace Blog.Quartz.Application.DTO
 {
-   public class QuartzOption:Entity<int>
+   public class QuartzOptionDTO
     {
+        /// <summary>
+        /// id
+        /// </summary>
+        public int Id { get; set; }
         /// <summary>
         /// 作业名称
         /// </summary>
@@ -26,7 +29,7 @@ namespace Blog.Quartz.Domain
         /// <summary>
         /// 最后执行时间
         /// </summary>
-        public DateTime? LastActionTime { get; set; } 
+        public string LastActionTime { get; set; }
         /// <summary>
         /// 描述
         /// </summary>
@@ -42,6 +45,6 @@ namespace Blog.Quartz.Domain
         /// <summary>
         /// 任务状态
         /// </summary>
-        public TaskStatus TaskStatus { get; set; }
+        public string TaskStatus { get; set; }
     }
 }

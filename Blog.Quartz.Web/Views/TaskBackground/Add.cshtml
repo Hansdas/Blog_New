@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "../Shared/_Layout";
+}
+<style>
+    .layui-form-label {
+        line-height: 14px !important
+    }
+
+    .layui-input {
+        height: 32px !important;
+    }
+
+    .req {
+        color: red
+    }
+</style>
+<form class="layui-form" id="option" style="padding-top:10px;width:85%" lay-filter="quart">
+    <div class="layui-form-item">
+        <label class="layui-form-label">作业名称<label class="req">*</label></label>
+        <div class="layui-input-block">
+            <input type="text" name="jobName" class="layui-input" placeholder="作业名称,同一个分组中作业名称不能相同">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">分组名称<label class="req">*</label></label>
+        <div class="layui-input-block">
+            <input type="text" name="groupName" class="layui-input" placeholder="作业分组名称，表示该作业所属分组">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">执行周期<label class="req">*</label></label>
+        <div class="layui-input-block">
+            <input type="text" name="cron" class="layui-input" placeholder="cron表达式，* * * * ? *">
+            <a href="https://cron.qqe2.com/" target="_blank" style="float:right;color:blue">cron表达式</a>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">调用api<label class="req">*</label></label>
+        <div class="layui-input-block">
+            <input type="text" name="api" class="layui-input" placeholder="调用的远程方法">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请求方式</label>
+        <div class="layui-input-block">
+            <select name="requestType" lay-verify="">
+                <option value="">请选择...</option>
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请求参数</label>
+        <div class="layui-input-block">
+            <input type="text" name="parameterValue" class="layui-input" placeholder="远程调用参数；格式如{A:B,C:D}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" class="layui-textarea" placeholder="任务的描述"></textarea>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+        var id = getSearchString('id')
+        if (id != undefined) {
+            var loading = layer.load(2);
+            $.ajax({
+                url: '/task/' + id,
+                type: 'get',
+                datatype: 'json',
+                success: function (res) {
+                    form.val('quart', {
+                        "jobName": res.data.jobName 
+                        , "groupName":  res.data.groupName
+                        , "cron": res.data.cron
+                        , "requestType": res.data.requestType 
+                        , "api": res.data.api 
+                        , "parameterValue": res.data.parameterValue
+                        , "description":  res.data.description
+                    });
+                    layer.close(loading);
+                },
+            })
+        }
+    });
+</script>

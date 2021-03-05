@@ -1,41 +1,319 @@
 ﻿@{
     Layout = "../Shared/_Layout";
 }
-<table id="task-list"></table>
-<script type="text/html" id="toolbar">
+<table id="task-list" lay-filter="task-list"></table>
+<script type="text/html" id="taskbar">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">新增</button>
-        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="getCheckData">开启全部任务</button>
-        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="getCheckData">开启已选任务</button>
-        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="isAll">暂停所选</button>
-        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="getCheckLength">暂停全部</button>
-        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="getCheckData">删除全部任务</button>
-        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="getCheckData">删除已选任务</button>
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="startAll">开启全部任务</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="startCheck">开启已选任务</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="stopAll">暂停全部</button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="stopCheck">暂停所选</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="deleteAll">删除全部任务</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="deleteCheck">删除已选任务</button>
     </div>
 </script>
+<script type="text/html" id="colAction">
+    <a class="layui-btn layui-btn-xs" lay-event="start">开始</a>
+    <a class="layui-btn layui-btn-xs" lay-event="run">执行一次</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="stop">暂停</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="~/lib/jquery/jquery.form.js"></script>
 <script>
     layui.use('table', function () {
         var table = layui.table;
+        initTable(table);
+        //头工具栏事件
+        table.on('toolbar(task-list)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '请填写表单（*必填）',
+                        area: ['580px', '580px'],
+                        content: 'add',
+                        btn: ['确定'],
+                        shade: 0,
+                        btn1: function (index, layero) {
+                            var loading = layer.load(2);
+                            var inputForm = $(window.frames["layui-layer-iframe" + index].document).contents().find("#option");
+                            inputForm.ajaxSubmit({
+                                'url': '/task/add',
+                                'type': 'post',
+                                'dataType': 'json',
+                                success: function (resp) {
+                                    layer.close(loading);
+                                    if (resp.code == "200") {
+                                        layer.msg("添加成功", {
+                                            icon: 6
+                                        });
+                                        initTable(table);
+                                    }
+                                    else {
+                                        layer.msg(resp.msg, { icon: 2 });
+                                        return;
+                                    }
+                                    layer.close(index);
+                                }
+                            });
+                        }
+                    });
+                    break;
+                   case 'startAll':
+                    loading = layer.load(2);
+                    $.ajax({
+                        url: '/task/operate',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { 'all': true, 'operation':'start' },
+                        success: function (res) {
+                            if (res.code == '200') {
+                                 initTable(table);
+                                 layer.msg("开启成功", { icon: 6});
 
-        //第一个实例
+                            }
+                            layer.close(loading);
+                        },
+                    })
+                    break;
+                case 'startCheck':
+                    loading = layer.load(2);
+                    var data = checkStatus.data;
+                    var array = new Array(data.length);
+                    for (var i = 0; i < data.length; i++) {
+                        array[i] = data[i].id;
+                    }
+                    $.ajax({
+                        url: '/task/operate',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { 'all': false, ids: JSON.stringify(array),'operation':'start' },
+                        success: function (res) {
+                            if (res.code == '200') {
+                                 initTable(table);
+                                 layer.msg("开启成功", { icon: 6});
+                            }
+                            layer.close(loading);
+                        },
+                    })
+                    break;
+                   case 'stopAll':
+                    loading = layer.load(2);
+                    $.ajax({
+                        url: '/task/operate',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { 'all': true,'operation':'stop' },
+                        success: function (res) {
+                            if (res.code == '200') {
+                                 initTable(table);
+                                 layer.msg("暂停成功", { icon: 6});
+                            }
+                            layer.close(loading);
+                        },
+                    })
+                    break;
+                case 'stopCheck':
+                    loading = layer.load(2);
+                    var data = checkStatus.data;
+                    var array = new Array(data.length);
+                    for (var i = 0; i < data.length; i++) {
+                        array[i] = data[i].id;
+                    }
+                    $.ajax({
+                        url: '/task/operate',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { 'all': false, ids: JSON.stringify(array), 'operation': 'stop' },
+                        success: function (res) {
+                            if (res.code == '200') {
+                                 initTable(table);
+                                 layer.msg("暂停成功", { icon: 6});
+                            }
+                            layer.close(loading);
+                        },
+                    })
+                    break;
+                   case 'deleteAll':
+                    loading = layer.load(2);
+                    $.ajax({
+                        url: '/task/operate',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { 'all': true,'operation':'delete' },
+                        success: function (res) {
+                            if (res.code == '200') {
+                                 initTable(table);
+                                 layer.msg("删除成功", { icon: 6});
+                            }
+                            layer.close(loading);
+                        },
+                    })
+                    break;
+                case 'deleteCheck':
+                    loading = layer.load(2);
+                    var data = checkStatus.data;
+                    var array = new Array(data.length);
+                    for (var i = 0; i < data.length; i++) {
+                        array[i] = data[i].id;
+                    }
+                    $.ajax({
+                        url: '/task/operate',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { 'all': false, ids: JSON.stringify(array),'operation':'delete' },
+                        success: function (res) {
+                            if (res.code == '200') {
+                                 initTable(table);
+                                 layer.msg("删除成功", { icon: 6});
+                            }
+                            layer.close(loading);
+                        },
+                    })
+                    break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(task-list)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除？', function (index) {
+                    loading = layer.load(2);
+                    layer.close(index);
+                    $.ajax({
+                        url: '/task/delete/' + data.id,
+                        type: 'delete',
+                        datatype: 'json',
+                        success: function () {
+                            table.reload('task-list', {
+                                page: {
+                                    curr: 1
+                                }
+                            });
+                            layer.close(loading);
+                        },
+                    })
+                });
+            } else if (obj.event === 'start') {
+                loading = layer.load(2);
+                $.ajax({
+                    url: '/task/start/' + data.id,
+                    type: 'delete',
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.msg(res.data, {
+                            icon: 6
+                        });
+                        layer.close(loading);
+                    },
+                })
+            }
+            else if (obj.event === 'stop') {
+                loading = layer.load(2);
+                $.ajax({
+                    url: '/task/stop/' + data.id,
+                    type: 'get',
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.msg(res.data, {
+                            icon: 6
+                        });
+                        layer.close(loading);
+                    },
+                })
+            }
+            else if (obj.event === 'edit') {
+                layer.open({
+                    type: 2,
+                    title: '请填写表单（*必填）',
+                    area: ['580px', '580px'],
+                    content: 'add?id=' + data.id,
+                    btn: ['确定'],
+                    shade: 0,
+                    btn1: function (index) {
+                        var loading = layer.load(2);
+                        var inputForm = $(window.frames["layui-layer-iframe" + index].document).contents().find("#option");
+                        inputForm.ajaxSubmit({
+                            'url': '/task/update/' + data.id,
+                            'type': 'post',
+                            'dataType': 'json',
+                            success: function (resp) {
+                                layer.close(loading);
+                                if (resp.code == "200") {
+                                    layer.msg("修改成功", {
+                                        icon: 6
+                                    });
+                                    initTable(table);
+                                }
+                                else {
+                                    layer.msg(resp.msg, { icon: 2 });
+                                    return;
+                                }
+                                layer.close(index);
+                            }
+                        });
+                    }
+                });
+            }
+            else if (obj.event === 'run') {
+                loading = layer.load(2);
+                $.ajax({
+                    url: '/task/run/' + data.id,
+                    type: 'get',
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.msg(res.data, {
+                            icon: 6
+                        });
+                        layer.close(loading);
+                    },
+                })
+            }
+        });
+    });
+    function initTable(table) {
         table.render({
             elem: '#task-list'
             , height: 312
-            , toolbar: '#toolbar'
-            , url: '/demo/table/user/' //数据接口
+            , toolbar: '#taskbar'
+            , contentType: 'application/json'
+            , loading: true
+            , limit: 10
+            , method: 'post'
+            , defaultToolbar: []
+            , url: '/task/list/page' //数据接口
             , page: true //开启分页
             , cols: [[ //表头
-                { field: 'id', title: '', width: 80, type:'checkbox', sort: true, fixed: 'left' }
-                , { field: 'username', title: '用户名', width: 80 }
-                , { field: 'sex', title: '性别', width: 80, sort: true }
-                , { field: 'city', title: '城市', width: 80 }
-                , { field: 'sign', title: '签名', width: 177 }
-                , { field: 'experience', title: '积分', width: 80, sort: true }
-                , { field: 'score', title: '评分', width: 80, sort: true }
-                , { field: 'classify', title: '职业', width: 80 }
-                , { field: 'wealth', title: '财富', width: 135, sort: true }
+                { field: 'id', title: '', width: 80, type: 'checkbox', sort: true, fixed: 'left' }
+                , { field: 'jobName', title: '作业名称' }
+                , { field: 'groupName', title: '分组名称' }
+                , { field: 'taskStatus', title: '状态' }
+                , { field: 'cron', title: '表达式 ' }
+                , { field: 'api', title: 'Api' }
+                , { field: 'lastActionTime', title: '最后执行时间' }
+                , { field: 'description', title: '描述' }
+                , { field: 'requestType', title: '请求方式' }
+                , { fixed: 'right', title: '操作', toolbar: '#colAction', width: 300, align: 'center' }
             ]]
+            , parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "total": res.data.count,
+                    "data": res.data.data
+                };
+            }
+            , response: {
+                statusName: 'code' //规定数据状态的字段名称，默认：code
+                , statusCode: 200 //规定成功的状态码，默认：0
+                , msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                , countName: 'total' //规定数据总数的字段名称，默认：count
+                , dataName: 'data' //规定数据列表的字段名称，默认：data
+            }
         });
-
-    });
+    }
 </script>
