@@ -21,7 +21,7 @@ namespace Blog.Repoistory.Test
                 services.AddDbContext<DbContext>();
                 IServiceProvider serviceProvider = services.BuildServiceProvider();
                 var builder = new DbContextOptionsBuilder<DBContext>();
-                builder.UseMySQL("Data Source=58.87.92.221;Database=Blog;User ID=sa;Password=Sa@123456;pooling=true;port=3306;sslmode=none;CharSet=utf8");
+                builder.UseMySQL("Data Source=;Database=Blog;User ID=sa;Password=;pooling=true;port=3306;sslmode=none;CharSet=utf8");
                 db = builder.Options;
             }
             catch (Exception ex)
