@@ -7,7 +7,6 @@ namespace Core.CPlatform
 {
    public class ServiceLocator
     {
-        public static IServiceProvider Instance { get; set; }
         private static Func<IServiceCollection, IServiceProvider> _buildServiceProvider;
         private static IServiceCollection _ServiceDescriptors;
         public static void Init(IServiceCollection serviceDescriptors, Func<IServiceCollection, IServiceProvider> buildServiceProvider)

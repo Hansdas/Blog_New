@@ -3,7 +3,6 @@ using Blog.Application.DTO;
 using Blog.Application.Service;
 using Core.Cache;
 using Core.Common.Http;
-using Core.Domain.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;

@@ -11,7 +11,7 @@ using Blog.Domain;
 using Blog.Repository;
 using Core.Cache;
 using Core.Common.Http;
-using Core.Domain.Core;
+using Core.CPlatform.Domain;
 using Core.Log;
 using Newtonsoft.Json;
 

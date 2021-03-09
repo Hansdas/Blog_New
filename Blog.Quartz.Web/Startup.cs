@@ -58,8 +58,6 @@ namespace Blog.Quartz.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             ServiceLocator.Init(serviceDescriptors, s => s.BuildServiceProvider());
-            //app.ApplicationServices.GetService<IQuartzOptionService>();
-            //var scope = app.ApplicationServices.CreateScope().ServiceProvider.GetService;
             IQuartzOptionService quartzOptionService = ServiceLocator.Get<IQuartzOptionService>();
             quartzOptionService.Init();
             loggerFactory.AddLog();

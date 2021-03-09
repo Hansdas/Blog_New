@@ -1,5 +1,5 @@
 ﻿using Blog.Domain;
-using Core.Domain.Core;
+using Core.CPlatform.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;

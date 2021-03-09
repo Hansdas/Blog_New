@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Auth.IdentityServer4;
 using Core.Consul;
 using Core.CPlatform;
+using Core.Log;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,8 +37,9 @@ namespace BlogAuthApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddLog();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

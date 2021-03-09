@@ -15,7 +15,7 @@ using Blog.Repository;
 using Core.Aop;
 using Core.Aop.Transaction;
 using Core.CPlatform;
-using Core.Domain.Core;
+using Core.CPlatform.Domain;
 using Core.Log;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
@@ -274,7 +274,6 @@ namespace Blog.Application.Service.imp
                 catch (Exception ex)
                 {
                     LogUtils.LogError(ex, "ArticleService.PostComment", ex.Message);
-                    throw ex;
                 }
             }
 

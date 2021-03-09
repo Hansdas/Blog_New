@@ -1,4 +1,4 @@
-﻿using Core.Domain.Core;
+﻿using Core.CPlatform.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace Core.Repository.Imp
         /// <returns></returns>
         public TEntity SelectById(T id)
         {
-            TEntity entity = _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefault(s=>s.Id.Equals(id));
+            TEntity entity = _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefault(s => s.Id.Equals(id));
             return entity;
         }
         /// <summary>

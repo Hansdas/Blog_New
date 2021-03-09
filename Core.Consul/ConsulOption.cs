@@ -30,5 +30,9 @@ namespace Core.Consul
         /// 服务名字
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool Enable { get; set; } = true;
     }
 }

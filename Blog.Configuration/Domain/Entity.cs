@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.Domain.Core
+namespace Core.CPlatform.Domain
 {
     public abstract class Entity<T>
     {

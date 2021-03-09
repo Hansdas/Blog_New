@@ -59,11 +59,10 @@ namespace Blog.Quartz.Application.Quartz
                     throw new HttpRequestException(apiResult.Msg);
                 quartzOption.LastActionTime = DateTime.Now;
                 quartzOptionRepository.Update(quartzOption);
-                LogUtils.LogInfo("Blog.Quartz.Application.Quartz.Job","立即执行成功");
             }
             catch (Exception ex)
             {
-               // LogUtils.LogError(ex, "Blog.Quartz.Application.Quartz.Job", ex.Message);
+               LogUtils.LogError(ex, "Blog.Quartz.Application.Quartz.Job", ex.Message);
             }
         }
     }

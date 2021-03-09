@@ -1,7 +1,6 @@
-﻿
-using Blog.Domain.Article;
+﻿using Blog.Domain.Article;
 using Core.Common.EnumExtensions;
-using Core.Domain.Core;
+using Core.CPlatform.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;

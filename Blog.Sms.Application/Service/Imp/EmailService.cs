@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Blog.Sms.Application.EventHandler.EmailEventHandler;
 using Blog.Sms.Repository;
 using Core.Common.Email;
-using Core.Domain.Core;
+using Core.CPlatform.Domain;
 using Newtonsoft.Json;
 
 namespace Blog.Sms.Application.Service.Imp

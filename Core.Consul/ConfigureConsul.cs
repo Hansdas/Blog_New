@@ -22,9 +22,10 @@ namespace Core.Consul
         }
         public static IApplicationBuilder UseConsul(this IApplicationBuilder builder)
         {
-            IConsulClient client = builder.ApplicationServices.GetRequiredService<IConsulClient>();
-
             ConsulOption model = ConfigureProvider.BuildModel<ConsulOption>("Consul");
+            if (!model.Enable)
+                return builder;
+            IConsulClient client = builder.ApplicationServices.GetRequiredService<IConsulClient>();
             string http = string.Format("{0}://{1}:{2}/api/health", model.Schem, model.Host, model.Port);
 
             AgentServiceCheck httpCheck = new AgentServiceCheck();
