@@ -59,13 +59,13 @@ namespace Blog.Repository.Imp
             return sql;
         }
         /// <summary>
-        /// 查询每组最大浏览量的数据
+        /// 查询每组最新的数据
         /// </summary>
         /// <returns></returns>
-        public  IList<Article> SelectGroupReadCount()
+        public  IList<Article> SelectGroupNewCount()
         {
             string sql = "select article_id,article_title,article_author,article_textsection,article_articletype,article_createtime " +
-                "from T_Article a where not exists(select * from T_Article where a.article_browsercount<article_browsercount and a.article_articletype=article_articletype )";
+                "from T_Article a where not exists(select * from T_Article where a.article_createtime<article_createtime and a.article_articletype=article_articletype )";
             IEnumerable<dynamic> results = connection.Query<dynamic>(sql).ToList();
             IList<Article> articles = new List<Article>();
             foreach(var d in results)

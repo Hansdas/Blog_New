@@ -19,7 +19,7 @@ namespace Blog.Application.Service
         /// 根据阅读量分组
         /// </summary>
         /// <returns></returns>
-        IList<ArticleDTO> GetGroupReadCount();
+        IList<ArticleDTO> GetGroupNewCount();
         /// <summary>
         /// 分页查询
         /// </summary>

@@ -59,7 +59,7 @@ namespace BlogWebApi.Controllers
         [Route("group/readcount")]
         public ApiResult GroupByReadcount()
         {
-            IList<ArticleDTO> articleDTOs = _articleService.GetGroupReadCount();
+            IList<ArticleDTO> articleDTOs = _articleService.GetGroupNewCount();
             return ApiResult.Success(articleDTOs);
         }
         [HttpGet]

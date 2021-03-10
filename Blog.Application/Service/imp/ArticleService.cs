@@ -90,9 +90,9 @@ namespace Blog.Application.Service.imp
         /// 根据阅读量分组
         /// </summary>
         /// <returns></returns>
-        public IList<ArticleDTO> GetGroupReadCount()
+        public IList<ArticleDTO> GetGroupNewCount()
         {
-            IList<Article> articles = _articleRepoistory.SelectGroupReadCount();
+            IList<Article> articles = _articleRepoistory.SelectGroupNewCount();
             IEnumerable<string> accounts = articles.Select(s => s.Author);
             Dictionary<string, string> accountWithName = _userRepoistory.AccountWithName(accounts);
             IList<ArticleDTO> articleDTOs = new List<ArticleDTO>();

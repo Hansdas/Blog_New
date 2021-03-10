@@ -14,7 +14,7 @@ namespace Blog.Repository
         /// 根据阅读量分组
         /// </summary>
         /// <returns></returns>
-        IList<Article> SelectGroupReadCount();
+        IList<Article> SelectGroupNewCount();
         /// <summary>
         /// 查询阅读量前5
         /// </summary>
