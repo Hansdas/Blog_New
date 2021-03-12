@@ -1,5 +1,6 @@
 ﻿using Blog.Application.DTO;
 using Blog.Application.Service;
+using Blog.Domain;
 using Core.Cache;
 using Core.Common;
 using Core.Common.Http;
@@ -71,7 +72,19 @@ namespace BlogWebApi.Controllers
             try
             {
                 _userService.Create(userDTO);
-                return ApiResult.Success();
+                IList<Claim> claims = new List<Claim>()
+                {
+                    new Claim("account", userDTO.Account),
+                    new Claim("username", userDTO.Username),
+                    new Claim("sex", string.IsNullOrEmpty(userDTO.Sex)?"男":userDTO.Sex),
+                    new Claim("birthDate", string.IsNullOrEmpty(userDTO.BirthDate)?"":userDTO.BirthDate),
+                    new Claim("email",string.IsNullOrEmpty(userDTO.Email)?"":userDTO.Email),
+                    new Claim("sign",string.IsNullOrEmpty(userDTO.Sign)?"":userDTO.Sign),
+                    new Claim("phone",string.IsNullOrEmpty(userDTO.Phone)?"":userDTO.Phone),
+                    new Claim("headPhoto",userDTO.HeadPhoto)
+                };
+                string token = Auth.CreateToken(claims);
+                return ApiResult.Success(token);
             }
             catch (AuthException ex)
             {

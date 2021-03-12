@@ -38,7 +38,7 @@ namespace Blog.Application.Service.imp
             user.Account = userDTO.Account;
             user.Username = userDTO.Username;
             user.LoginType = userDTO.LoginType;
-            user.Sex = Enum.Parse<Sex>(userDTO.Sex);
+            user.Sex =string.IsNullOrEmpty(userDTO.Sex)?Sex.男: Enum.Parse<Sex>(userDTO.Sex);
             user.HeadPhoto = userDTO.HeadPhoto;
             if (!string.IsNullOrEmpty(userDTO.BirthDate))
                 user.BirthDate = Convert.ToDateTime(userDTO.BirthDate);
@@ -46,6 +46,7 @@ namespace Blog.Application.Service.imp
             user.Sign = userDTO.Sign;
             user.Phone = userDTO.Phone;
             user.IsValid = true;
+            user.Password = userDTO.Password;
             return user;
         }
         public UserDTO SelectSingle(Expression<Func<User, bool>> where)

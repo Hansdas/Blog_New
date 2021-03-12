@@ -12,8 +12,10 @@ namespace Core.Log
     {
         public static void AddLog(this ILoggerFactory loggerFactory)
         {
+            LogOption logOption = ConfigureProvider.BuildModel<LogOption>("LogOption");
+            if (!logOption.EnableLog) 
+                return;
             loggerFactory.AddNLog();
-            LogOption logOption= ConfigureProvider.BuildModel<LogOption>("LogOption");
             LogUtils.EnableNlog = Convert.ToBoolean(logOption.EnableLog);
             loggerFactory.ConfigureNLog(logOption.ConfigPath);
         }

@@ -8,16 +8,23 @@ using System.Text;
 
 namespace Core.Cache.Redis
 {
-   public class RedisProvider
+    public class RedisProvider
     {
         private static ConcurrentDictionary<string, ConnectionMultiplexer> connectionDic = new ConcurrentDictionary<string, ConnectionMultiplexer>();
+        private static object _lock = new object();
         public static IDatabase Instance
         {
             get
             {
                 if (_database == null)
                 {
-                    _database = GetConnection().GetDatabase(_defaultDB);
+                    lock (_lock)
+                    {
+                        if (_database == null)
+                        {
+                            _database = GetConnection().GetDatabase(_defaultDB);
+                        }
+                    }
                 }
                 return _database;
             }

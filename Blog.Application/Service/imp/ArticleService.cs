@@ -14,6 +14,7 @@ using Blog.Domain.Article;
 using Blog.Repository;
 using Core.Aop;
 using Core.Aop.Transaction;
+using Core.Common.Http;
 using Core.CPlatform;
 using Core.CPlatform.Domain;
 using Core.Log;
@@ -189,6 +190,7 @@ namespace Blog.Application.Service.imp
             articleDTO.Title = article.Title;
             articleDTO.AuthorAccount = article.Author;
             articleDTO.AuthorName = user.Username;
+            articleDTO.AuthorPhoto = user.HeadPhoto;
             articleDTO.Content = article.Content;
             articleDTO.CreateDate = article.CreateTime.ToString("yyyy-MM-dd HH:mm");
             articleDTO.ReviewCount = article.CommentCount;
@@ -290,11 +292,10 @@ namespace Blog.Application.Service.imp
             httpContext.HttpContext.Request.Headers.TryGetValue("authorization", out StringValues authorization);
             httpClient.DefaultRequestHeaders.Add("Authorization", authorization.ToString());
             HttpResponseMessage responseMessage = await httpClient.PostAsync(ConstantKey.GATEWAY_HOST + "/sms/singlar/tidings/count", formUrlEncodedContent);
-            if (!responseMessage.IsSuccessStatusCode)
-            {
-                //LogUtils.LogError(ex, "ArticleService.PostComment", ex.Message);
-            }
-            var v=await responseMessage.Content.ReadAsStringAsync();
+            responseMessage.EnsureSuccessStatusCode();
+            ApiResult apiResult = JsonConvert.DeserializeObject<ApiResult>(await responseMessage.Content.ReadAsStringAsync());
+            if (apiResult.Code != HttpStatusCode.SUCCESS)
+                throw new HttpRequestException(apiResult.Msg);
 
         }
 
