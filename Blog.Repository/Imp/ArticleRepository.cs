@@ -276,5 +276,19 @@ namespace Blog.Repository.Imp
             IEnumerable<dynamic> resultList = connection.Query(sql, parameters);
             return resultList;
         }
+        /// <summary>
+        /// 更新点赞熟
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancel"></param>
+        public void UpdatePraise(int id, bool praise)
+        {
+            string sql = "";
+            if (!praise)
+                sql = "update T_Article set article_praisecount=article_praisecount-1 where article_id={0} and article_praisecount>0";
+            else
+                sql = "update T_Article set article_praisecount=article_praisecount+1 where article_id={0}";
+            _dbContext.Database.ExecuteSqlRaw(sql,id);
+        }
     }
 }

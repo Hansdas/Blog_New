@@ -1,4 +1,5 @@
-﻿using Core.EventBus.RabbitMQ.Imp;
+﻿using Core.Common;
+using Core.EventBus.RabbitMQ.Imp;
 using Core.Log;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -50,7 +51,10 @@ namespace Core.EventBus.RabbitMQ
             string routeKey = eventData.GetType().Name;
             string message = JsonConvert.SerializeObject(eventData);
             byte[] body = Encoding.UTF8.GetBytes(message);
+            channel.ConfirmSelect();
             channel.BasicPublish(exchangeName, routeKey, null, body);
+            bool b = channel.WaitForConfirms();
+          
         }
 
         public void Subscribe<T, TH>()

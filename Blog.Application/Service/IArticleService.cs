@@ -27,7 +27,7 @@ namespace Blog.Application.Service
         /// <param name="pageSize"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
-        IList<ArticleDTO> SelectByPage(int currentPage, int pageSize, ArticleCondition condition=null);
+        IList<ArticleDTO> SelectByPage(int currentPage, int pageSize, ArticleCondition condition=null,string loginAccount=null);
         /// <summary>
         /// 查询总数
         /// </summary>

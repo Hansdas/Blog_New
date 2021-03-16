@@ -2,25 +2,24 @@
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Cache.Redis
 {
     public class RedisClient : ICacheClient
-    {    /// <summary>
-         /// 过期时间
-         /// </summary>
-        private TimeSpan ExpireTime = new TimeSpan(24, 0, 0);
+    {
+        /// <summary>
+        /// 过期时间
+        /// </summary>
+        private static TimeSpan ExpireTime = new TimeSpan(24, 0, 0);
+
         #region String操作
-        public void StringSet(string key, string value, TimeSpan expiry)
-        {
-            RedisProvider.Instance.StringSet(key, value, expiry);
-        }
         public void StringSet<T>(string key, T t, TimeSpan? expiry = null)
         {
             string json = JsonConvert.SerializeObject(t);
-            StringSet(key, json, expiry ?? ExpireTime);
+            RedisProvider.Instance.StringSet(key,json,expiry);
         }
         public string StringGet(string key)
         {
@@ -32,6 +31,21 @@ namespace Core.Cache.Redis
             if (string.IsNullOrEmpty(value))
                 return default(T);
             return JsonConvert.DeserializeObject<T>(value);
+        }
+        public List<T> StringGetList<T>(string[] keys)
+        {
+            RedisKey[] redisKeys = new RedisKey[keys.Length];
+            for (int i = 0; i < keys.Length; i++)
+                redisKeys[i] = keys[i];            
+            RedisValue[] redisValues=  RedisProvider.Instance.StringGet(redisKeys);
+            List<T> list = new List<T>();
+            for(int i = 0; i < redisValues.Length; i++)
+            {
+                string json = redisValues[i];
+                T t = JsonConvert.DeserializeObject<T>(json);
+                list.Add(t);
+            }
+            return list;
         }
         #endregion
 
@@ -113,7 +127,6 @@ namespace Core.Cache.Redis
             }
             return list;
         }
-
         #endregion
     }
 }

@@ -31,11 +31,11 @@ namespace BlogWebApi.Controllers
 
         [Route("add")]
         [HttpPost]
-        public ApiResult Add([FromBody]ArticleDTO articleDTO)
+        public ApiResult Add([FromBody] ArticleDTO articleDTO)
         {
             UserDTO user = Auth.GetLoginUser();
             articleDTO.AuthorAccount = user.Account;
-             int id= _articleService.Add(articleDTO);
+            int id = _articleService.Add(articleDTO);
             return ApiResult.Success(id);
         }
         [HttpGet]
@@ -47,13 +47,22 @@ namespace BlogWebApi.Controllers
         }
         [HttpPost]
         [Route("page")]
-        public ApiResult LoadArticlePage([FromBody]ArticleCondition articleCondition)
+        public ApiResult LoadArticlePage([FromBody] ArticleCondition articleCondition)
         {
+            string loginAccount = "";
+            try
+            {
+                loginAccount = Auth.GetLoginUser().Account;
+            }
+            catch (AuthException)
+            {
+                loginAccount = "";
+            }
             if (articleCondition.LoginUser)
-                articleCondition.Account = Auth.GetLoginUser().Account;
-            IList<ArticleDTO> articleDTOs = _articleService.SelectByPage(articleCondition.CurrentPage, articleCondition.PageSize, articleCondition);
-            int count= _articleService.SelectCount(articleCondition);
-            return ApiResult.Success(new { list= articleDTOs ,total=count});
+                articleCondition.Account = loginAccount;
+            IList<ArticleDTO> articleDTOs = _articleService.SelectByPage(articleCondition.CurrentPage, articleCondition.PageSize, articleCondition, loginAccount);
+            int count = _articleService.SelectCount(articleCondition);
+            return ApiResult.Success(new { list = articleDTOs, total = count });
         }
         [HttpGet]
         [Route("group/readcount")]
@@ -66,7 +75,7 @@ namespace BlogWebApi.Controllers
         [Route("context/{id}")]
         public ApiResult GetUpNext(int id)
         {
-             UpNextDto upNextDto= _articleService.SelectContext(id);
+            UpNextDto upNextDto = _articleService.SelectContext(id);
             return ApiResult.Success(upNextDto);
         }
         [HttpGet]
@@ -106,7 +115,7 @@ namespace BlogWebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("user/archive")]        
+        [Route("user/archive")]
         public ApiResult GetArchive()
         {
             UserDTO userDTO = Auth.GetLoginUser();
@@ -133,6 +142,14 @@ namespace BlogWebApi.Controllers
         {
             _articleService.DeleteById(id);
             return ApiResult.Success();
+        }
+        [Route("praise/{id}")]
+        [HttpPost]
+        public ApiResult Praise(int id)
+        {
+            //string account = Auth.GetLoginUser().Account;
+            bool praise =  _articleService.Praise(id, "admin");
+            return ApiResult.Success(praise);
         }
     }
 }

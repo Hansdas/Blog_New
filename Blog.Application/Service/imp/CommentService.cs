@@ -5,6 +5,7 @@ using Core.Common.EnumExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Blog.Application.Service.imp
@@ -22,7 +23,8 @@ namespace Blog.Application.Service.imp
         {
             if (ids.Count() == 0 || ids == null)
                 return null;
-            IEnumerable<Comment> comments = _commentRepository.Select(s=>ids.Contains(s.Guid));
+            Expression<Func<Comment, object>> orderBy = s => s.PostDate;
+            IEnumerable<Comment> comments = _commentRepository.Select(s=>ids.Contains(s.Guid), orderBy);
             List<string> accounts = comments.Select(s => s.PostUser).ToList();
             accounts.AddRange(comments.Select(s => s.RevicerUser));
             IList<User> users=_userRepository.Select(s => accounts.Distinct().Contains(s.Account)).ToList();

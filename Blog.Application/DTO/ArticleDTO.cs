@@ -97,6 +97,10 @@ namespace Blog.Application.DTO
         /// </summary>
         public int PraiseCount { get; set; }
         /// <summary>
+        /// 如果登录则判断是否已点赞
+        /// </summary>
+        public bool Praise { get; set; } = false;
+        /// <summary>
         /// 评论集合
         /// </summary>
         public IList<CommentDTO> Comments { get; set; }

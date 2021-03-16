@@ -47,5 +47,6 @@ namespace Core.CPlatform.Domain
         /// </summary>
 
         public const string MAIL_CONFIG_KEY = "MAIL_CONFIG_KEY";
+        public const string ASCI_KEY = "ttblog";
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using Blog.Application.Condition;
@@ -14,6 +15,7 @@ using Blog.Domain.Article;
 using Blog.Repository;
 using Core.Aop;
 using Core.Aop.Transaction;
+using Core.Cache;
 using Core.Common.Http;
 using Core.CPlatform;
 using Core.CPlatform.Domain;
@@ -32,8 +34,10 @@ namespace Blog.Application.Service.imp
         private ICommentRepository _commentRepository;
         private ITidingsService _tidingsService;
         private IHttpClientFactory _httpClientFactory;
+        private ICacheFactory _cacheFactory;
+        private static string Praise_Key = "Praise_Key";
         public ArticleService(IArticleRepository articleRepoistory, IUserRepository userRepoistory, ICommentService commentService
-            , ICommentRepository commentRepository, ITidingsService tidingsService, IHttpClientFactory httpClientFactory)
+            , ICommentRepository commentRepository, ITidingsService tidingsService, IHttpClientFactory httpClientFactory, ICacheFactory cacheFactory)
         {
             _articleRepoistory = articleRepoistory;
             _userRepoistory = userRepoistory;
@@ -41,6 +45,7 @@ namespace Blog.Application.Service.imp
             _commentRepository = commentRepository;
             _tidingsService = tidingsService;
             _httpClientFactory = httpClientFactory;
+            _cacheFactory = cacheFactory;
         }
         /// <summary>
         /// 抓换查询条件
@@ -121,12 +126,14 @@ namespace Blog.Application.Service.imp
         /// <param name="pageSize"></param>
         /// <param name="condition"></param>
         /// <returns></returns>
-        public IList<ArticleDTO> SelectByPage(int currentPage, int pageSize, ArticleCondition condition = null)
+        public IList<ArticleDTO> SelectByPage(int currentPage, int pageSize, ArticleCondition condition = null, string loginAccount = null)
         {
             IEnumerable<Article> articles = _articleRepoistory.SelectByPageWithDapper(currentPage, pageSize, ConvertCondition(condition));
             IEnumerable<string> accounts = articles.Select(s => s.Author);
             Dictionary<string, string> accountWithName = _userRepoistory.AccountWithName(accounts);
             IList<ArticleDTO> articleDTOs = new List<ArticleDTO>();
+            ICacheClient cacheClient= _cacheFactory.CreateClient(CacheType.Redis);
+            Dictionary<int, HashSet<string>> dic = cacheClient.StringGet<Dictionary<int, HashSet<string>>>(Praise_Key);
             foreach (var item in articles)
             {
                 ArticleDTO articleDTO = new ArticleDTO();
@@ -140,6 +147,12 @@ namespace Blog.Application.Service.imp
                 articleDTO.ReviewCount = item.CommentCount;
                 articleDTO.PraiseCount = item.PraiseCount;
                 articleDTO.ReadCount = item.BrowserCount;
+                if (dic != null&&dic.Count>0&&dic.ContainsKey(item.Id)&&!string.IsNullOrEmpty(loginAccount))
+                {
+                    HashSet<string> set = dic[item.Id];
+                    if (set.Contains(loginAccount))
+                        articleDTO.Praise = true;
+                }
                 articleDTOs.Add(articleDTO);
             }
             return articleDTOs;
@@ -318,6 +331,44 @@ namespace Blog.Application.Service.imp
         public void DeleteById(int id)
         {
             _articleRepoistory.DeleteById(id);
+        }
+
+        public bool Praise(int id, string account)
+        {
+            bool praise = false;
+            ICacheClient cacheClient = _cacheFactory.CreateClient(CacheType.Redis);
+            Dictionary<int, HashSet<string>> dic = cacheClient.StringGet<Dictionary<int, HashSet<string>>>(Praise_Key);
+            dic = dic ?? new();
+            if(!dic.ContainsKey(id))
+            {
+                praise = true;
+                HashSet<string> set = new HashSet<string>();
+                set.Add(account);
+                dic.Add(id, set);
+            }
+            else
+            {
+                praise = dic[id].Add(account);
+                if (!praise)
+                    dic[id].Remove(account); //取消点赞
+            }
+             Task.Run(() =>
+            {
+                try
+                {
+                   
+                    cacheClient.StringSet(Praise_Key,dic);
+                    //因为Scope模式是同一个请求获取得到相同的实例，所以主线程已经释放了对象，但新的线程还在使用
+                    IArticleRepository articleRepository = ServiceLocator.Get<IArticleRepository>();
+                    articleRepository.UpdatePraise(id, praise);
+                    
+                }
+                catch (Exception ex)
+                {
+                    LogUtils.LogError(ex, "ArticleService.Praise", ex.Message);
+                }
+            });
+            return praise;
         }
     }
 }

@@ -59,5 +59,12 @@ namespace Blog.Repository
         /// <param name="articleCondition"></param>
         /// <returns></returns>
         IEnumerable<dynamic> SelectArticleFile(Hashtable articleCondition);
+        /// <summary>
+        /// 更新点赞熟
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="praise"></param>
+
+        void UpdatePraise(int id, bool praise);
     }
 }

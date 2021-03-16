@@ -7,6 +7,7 @@ namespace Core.Common
 {
     public class EncrypUtil
     {
+        const string KEY_64 = "VavicApp";
         public static string MD5Encry(string strs)
         {
             if (string.IsNullOrEmpty(strs))

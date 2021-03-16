@@ -8,9 +8,33 @@ namespace Core.Cache
    public interface ICacheClient
     {
         #region String操作
-        void StringSet(string key, string value, TimeSpan expiry);
+        /// <summary>
+        /// 添加string缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expiry"></param>
         void StringSet<T>(string key, T t, TimeSpan? expiry = null);
+        /// <summary>
+        /// 获取string缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expiry"></param>
         T StringGet<T>(string key);
+        /// <summary>
+        /// 获取string缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expiry"></param>
+        List<T> StringGetList<T>(string[] keys);
+        /// <summary>
+        /// 获取string缓存
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expiry"></param>
         string StringGet(string key);
         #endregion
 
