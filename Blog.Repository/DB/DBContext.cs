@@ -25,6 +25,7 @@ namespace Blog.Repository.DB
             modelBuilder.ApplyConfiguration(new CommentMap());
             modelBuilder.ApplyConfiguration(new LeaveMessageMap());
             modelBuilder.ApplyConfiguration(new TidingsMap());
+            modelBuilder.ApplyConfiguration(new GalleryMap());
         }
     }
 }

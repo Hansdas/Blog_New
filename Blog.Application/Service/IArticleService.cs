@@ -75,5 +75,10 @@ namespace Blog.Application.Service
         /// 根据id删除
         /// </summary>
         void DeleteById(int id);
+        /// <summary>
+        /// 点赞
+        /// </summary>
+        /// <param name="id"></param>
+        bool Praise(int id,string account);
     }
 }

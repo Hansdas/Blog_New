@@ -25,6 +25,7 @@ namespace BlogWebApi
             services.AddScoped<IUserService,UserService>();
             services.AddScoped<ILeaveMessageService, LeaveMessageService>();
             services.AddScoped<ITidingsService, TidingsService>();
+            services.AddScoped<IGalleryService, GalleryService>();
             return services;
         }
         /// <summary>
@@ -40,6 +41,7 @@ namespace BlogWebApi
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ILeaveMessageRepository, LeaveMessageRepository>();
             services.AddScoped<ITidingsRepository, TidingsRepository>();
+            services.AddScoped<IGalleryRepository, GalleryRepository>();
             return services;
         }
         /// <summary>

@@ -19,7 +19,7 @@ namespace Blog.Repository.Map
             builder.Property(s => s.ReviceUser).HasColumnName("tidings_reviceuser");
             builder.Property(s => s.PostContent).HasColumnName("tidings_postcontent");
             builder.Property(s => s.IsRead).HasColumnName("tidings_isread");
-            builder.Property(s => s.SendDate).HasColumnName("tidings_senddate");
+            builder.Property(s => s.CreateTime).HasColumnName("tidings_createtime");
             builder.Property(s => s.Url).HasColumnName("tidings_url");
             builder.Property(s => s.AdditionalData).HasColumnName("tidings_additionaldata");
         }

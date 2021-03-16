@@ -29,7 +29,7 @@ namespace Blog.Application.Service.imp
             tidings.PostUser = tidingsDTO.PostUserAccount;
             tidings.ReviceUser = tidingsDTO.ReviceUserAccount;
             tidings.Url = tidingsDTO.Url;
-            tidings.SendDate = Convert.ToDateTime(tidingsDTO.PostDate);
+            tidings.CreateTime = Convert.ToDateTime(tidingsDTO.PostDate);
             tidings.CommentId = tidingsDTO.CommentId;
             tidings.IsRead = tidingsDTO.IsRead;
             tidings.AdditionalData = tidingsDTO.Content;
@@ -57,7 +57,7 @@ namespace Blog.Application.Service.imp
                 tidingsModel.ReviceUsername = dic[item.ReviceUser];
                 tidingsModel.ReviceUserAccount = item.ReviceUser;
                 tidingsModel.Url = item.Url;
-                tidingsModel.PostDate = item.SendDate.ToString("yyyy-MM-dd hh:mm");
+                tidingsModel.PostDate = item.CreateTime.ToString("yyyy-MM-dd hh:mm");
                 tidingsModels.Add(tidingsModel);
             }
             return tidingsModels;

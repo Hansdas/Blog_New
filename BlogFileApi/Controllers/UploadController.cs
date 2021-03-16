@@ -42,6 +42,17 @@ namespace BlogFileApi.Controllers
             return new JsonResult(new { uploaded = 1, fileName = newFileName, url = url });
         }
 
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        [Route("upload/images")]
+        public ApiResult Uploads()
+        {
+            var imgFile = Request.Form.Files[0];
+            string fileName = imgFile.FileName;
+            string url;
+            string newFileName;
+           return UploadFile(imgFile, fileName, out url, out newFileName);
+        }
         private ApiResult UploadFile(IFormFile imgFile, string fileName, out string url, out string newName)
         {
             int index = fileName.LastIndexOf('.');
@@ -67,7 +78,7 @@ namespace BlogFileApi.Controllers
                 }
                 //string savePath = string.Format("{0}/bf/{1}", http, datePath);
                 url = string.Format("{0}/file/{1}",http,datePath+newFileName);
-                return ApiResult.Success(new { savepath = datePath, datepath = datePath, code = '0', length = imgFile.Length });
+                return ApiResult.Success(new { savepath = datePath, datepath = datePath, url= url, code = "200", length = imgFile.Length });
             }
             catch (Exception e)
             {

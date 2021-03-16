@@ -29,10 +29,6 @@ namespace Blog.Domain.Tidings
         /// </summary>
         public bool IsRead { get; set; }
         /// <summary>
-        /// 发送日期
-        /// </summary>
-        public DateTime SendDate { get; set; }
-        /// <summary>
         /// 跳转url
         /// </summary>
         public string Url { get; set; }
@@ -40,8 +36,6 @@ namespace Blog.Domain.Tidings
         /// 附加信息
         /// </summary>
         public string AdditionalData { get; set; }
-        [NotMapped]
-        public new DateTime CreateTime { get; set; }
         [NotMapped]
         public new DateTime? UpdateTime { get; set; }
     }

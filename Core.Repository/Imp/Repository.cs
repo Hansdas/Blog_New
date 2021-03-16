@@ -14,7 +14,11 @@ namespace Core.Repository.Imp
         /// <summary>
         /// 是否降序
         /// </summary>
-        protected bool desc;
+        protected bool desc=true;
+        /// <summary>
+        /// 默认时间排序
+        /// </summary>
+        private Expression<Func<TEntity, object>> defaultOrderBy = s => s.CreateTime;
         public Repository(DbContext dbContext)
         {
             desc = true;
@@ -68,7 +72,7 @@ namespace Core.Repository.Imp
         /// <returns></returns>
         public virtual IEnumerable<TEntity> Select(Expression<Func<TEntity, bool>> where, Expression<Func<TEntity, object>> orderBy = null)
         {
-            return AsQueryable(where);
+            return AsQueryable(where, orderBy);
         }
         /// <summary>
         /// 分页查询
@@ -86,8 +90,8 @@ namespace Core.Repository.Imp
             IQueryable<TEntity> queryable = _dbContext.Set<TEntity>().AsNoTracking();
             if (where != null)
                 queryable = queryable.Where(where);
-            if (orderBy != null)
-                queryable = desc == true ? queryable.OrderByDescending(orderBy) : queryable.OrderBy(orderBy);
+            orderBy = orderBy == null ? defaultOrderBy : orderBy;
+            queryable = desc == true ? queryable.OrderByDescending(orderBy) : queryable.OrderBy(orderBy);
             return queryable;
         }
         /// <summary>
